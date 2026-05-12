@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — Availability & Merchandising Prototype</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f5f5;
+    --white: #ffffff;
+    --text: #222222;
+    --text-muted: #717171;
+    --text-hint: #b0b0b0;
+    --border: #e0e0e0;
+    --border-light: #ebebeb;
+    --surface: #f7f7f7;
+    --pink: #FF385C;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-pill: 30px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Page chrome ── */
+  .page-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border-light);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .page-header .logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--pink);
+    letter-spacing: -0.5px;
+  }
+  .page-header .meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: right;
+    line-height: 1.5;
+  }
+  .page-header .meta strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ── Layout ── */
+  .layout {
+    display: flex;
+    gap: 24px;
+    max-width: 960px;
+    margin: 32px auto;
+    padding: 0 24px;
+    align-items: flex-start;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 180px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 24px;
+  }
+  .sidebar-section {
+    margin-bottom: 20px;
+  }
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-hint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    padding: 0 4px;
+  }
+  .sbtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 400;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+    font-family: inherit;
+    line-height: 1.3;
+    transition: all 0.12s;
+  }
+  .sbtn:hover { background: var(--white); color: var(--text); border-color: var(--border-light); }
+  .sbtn.on {
+    background: var(--white);
+    border-color: var(--border);
+    color: var(--text);
+    font-weight: 600;
+  }
+  .sdot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .d-out { background: var(--pink); }
+  .d-in  { background: #1D9E75; }
+
+  /* ── Phone ── */
+  .phone-col {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .phone {
+    width: 320px;
+    background: var(--white);
+    border-radius: 44px;
+    border: 2px solid #d0d0d0;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+    color: var(--text);
+  }
+
+  /* Status bar */
+  .pstatus {
+    padding: 16px 24px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+  }
+  .pstatus-icons { display: flex; gap: 4px; align-items: center; }
+
+  /* Search pill */
+  .search-pill {
+    margin: 4px 16px 10px;
+    background: var(--white);
+    border-radius: var(--radius-pill);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+
+  /* Nav tabs */
+  .tabs-row {
+    display: flex;
+    gap: 6px;
+    padding: 0 16px 12px;
+    overflow: hidden;
+  }
+  .ptab {
+    padding: 7px 13px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text-muted);
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.12s;
+  }
+  .ptab.on {
+    background: var(--white);
+    border-color: var(--text);
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  /* Screen content */
+  .screen {
+    padding: 0 16px 24px;
+    max-height: 580px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* Essential services rows */
+  .esvc-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 12px;
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background 0.12s;
+    border: 1px solid transparent;
+  }
+  .esvc-row:hover { background: #f0f0f0; border-color: var(--border-light); }
+  .esvc-icon {
+    width: 46px; height: 46px;
+    background: var(--white);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+    font-size: 22px;
+    border: 1px solid var(--border-light);
+  }
+  .esvc-text { flex: 1; }
+  .esvc-name { font-size: 14px; font-weight: 500; color: var(--text); }
+  .esvc-sub  { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+  .esvc-thumb {
+    width: 46px; height: 46px;
+    border-radius: 10px;
+    background: #ede9e3;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  /* Section headers */
+  .sec-hd {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px 0 10px;
+  }
+  .sec-title { font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.2; }
+  .sec-sub   { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .sec-arrow {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Photo grid */
+  .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pcard { border-radius: 12px; overflow: hidden; cursor: pointer; }
+  .pcard-img {
+    width: 100%; height: 118px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .badge {
+    position: absolute; top: 8px; left: 8px;
+    background: rgba(255,255,255,0.92);
+    color: var(--text);
+    font-size: 10px; font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .heart {
+    position: absolute; top: 8px; right: 8px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.22);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pcard-info { padding: 7px 2px 0; }
+  .pcard-name  { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.3; }
+  .pcard-price { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Recently viewed scroll */
+  .rec-scroll { display: flex; gap: 10px; overflow: hidden; }
+  .rec-card { flex-shrink: 0; width: 92px; }
+  .rec-img {
+    width: 92px; height: 84px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .rec-name { font-size: 11px; font-weight: 500; color: var(--text); margin-top: 5px; line-height: 1.3; }
+  .rec-host { font-size: 10px; color: var(--text-muted); }
+
+  /* Continue card */
+  .continue-card {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: border-color 0.12s;
+  }
+  .continue-card:hover { border-color: var(--border); }
+  .continue-thumb {
+    width: 58px; height: 58px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .continue-card h4 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; line-height: 1.3; }
+  .continue-card p  { font-size: 12px; color: var(--text-muted); }
+
+  /* Hero interstitial card */
+  .hero-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 22px 18px 18px;
+    margin-bottom: 4px;
+    text-align: center;
+    border: 1px solid var(--border-light);
+  }
+  .hero-illo { font-size: 64px; display: block; margin-bottom: 12px; }
+  .hero-title { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 6px; }
+  .hero-sub   { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+  .hero-btn {
+    display: block; width: 100%;
+    padding: 13px;
+    background: var(--white);
+    color: var(--text);
+    border-radius: var(--radius-pill);
+    font-size: 14px; font-weight: 500;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.12s;
+  }
+  .hero-btn:hover { background: #f0f0f0; }
+
+  /* Bottom nav */
+  .bot-nav {
+    border-top: 1px solid var(--border-light);
+    padding: 10px 0 8px;
+    display: flex;
+    justify-content: space-around;
+    background: var(--white);
+  }
+  .bnav {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 2px; font-size: 9px; font-weight: 500; color: var(--text-muted);
+  }
+  .bnav.on { color: var(--pink); }
+
+  /* ── Bottom sheet overlay ── */
+  .sheet-wrap {
+    margin: 0 -16px;
+    min-height: 400px;
+    background: rgba(0,0,0,0.38);
+    display: flex;
+    align-items: flex-end;
+  }
+  .sheet {
+    background: var(--white);
+    border-radius: 24px 24px 0 0;
+    padding: 0 20px 32px;
+    width: 100%;
+  }
+  .sheet-handle {
+    width: 40px; height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    margin: 14px auto 16px;
+  }
+  .sheet-top {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 4px;
+  }
+  .sheet-close {
+    width: 30px; height: 30px;
+    background: #f0f0f0;
+    border: none; border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+  }
+  .sheet-close:hover { background: #e4e4e4; }
+  .sheet-illo  { font-size: 64px; text-align: center; display: block; margin: 4px 0 12px; }
+  .sheet-title { font-size: 22px; font-weight: 700; color: var(--text); text-align: center; margin-bottom: 6px; line-height: 1.2; }
+  .sheet-sub   { font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 16px; }
+  .sheet-ctx   { font-size: 11px; color: var(--text-hint); text-align: center; margin-top: -10px; margin-bottom: 14px; }
+  .btn-dark {
+    display: block; width: 100%;
+    padding: 15px;
+    background: var(--text);
+    color: var(--white);
+    border-radius: var(--radius-pill);
+    font-size: 15px; font-weight: 600;
+    border: none; cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 8px;
+    transition: background 0.12s;
+  }
+  .btn-dark:hover { background: #333; }
+  .sheet-legal {
+    font-size: 10px; color: var(--text-hint);
+    text-align: center; line-height: 1.5;
+    margin-top: 10px;
+  }
+
+  /* Sign-in gate sheet */
+  .signin-wrap { text-align: center; padding: 4px 0 8px; }
+  .signin-wrap p { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 18px; line-height: 1.4; }
+  .btn-outline {
+    display: block; width: 100%;
+    padding: 14px;
+    background: var(--white);
+    color: var(--text);
+    border-radius: var(--radius-pill);
+    font-size: 15px; font-weight: 500;
+    border: 1.5px solid var(--text);
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 10px;
+    transition: background 0.12s;
+  }
+  .btn-outline:hover { background: var(--surface); }
+
+  /* ── Right panel ── */
+  .right-col { width: 188px; flex-shrink: 0; position: sticky; top: 24px; }
+  .info-card {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .info-card h4 {
+    font-size: 10px; font-weight: 600;
+    color: var(--text-hint);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .flow-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    margin-bottom: 8px;
+    font-size: 12px; color: var(--text-muted); line-height: 1.4;
+  }
+  .fnum {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 9px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+    color: var(--text);
+  }
+  .fnum.cur { background: var(--text); color: var(--white); border-color: var(--text); }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  .tag-out { background: #ffeef0; color: #c8002a; }
+  .tag-in  { background: #e1f5ee; color: #085041; }
+
+  /* Scrollbar for page */
+  html { scroll-behavior: smooth; }
+
+  /* Img placeholders */
+  .img-ph { background: #e8e4df; }
+
+  /* Subtle pattern bg */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: radial-gradient(circle, #d4d0cb 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .page-header, .layout { position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="logo">airbnb</div>
+  <div class="meta">
+    <strong>Services — Availability &amp; Merchandising</strong><br>
+    Prototype · DRI: Daniel Delphin
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">User state</div>
+      <button class="sbtn on" onclick="go('null')" id="b-null"><span class="sdot d-out"></span>Null</button>
+      <button class="sbtn" onclick="go('prev')" id="b-prev"><span class="sdot d-out"></span>Prev searched</button>
+      <button class="sbtn" onclick="go('trip')" id="b-trip"><span class="sdot d-in"></span>Trip booked</button>
+      <button class="sbtn" onclick="go('after')" id="b-after"><span class="sdot d-in"></span>After booking</button>
+      <button class="sbtn" onclick="go('during')" id="b-during"><span class="sdot d-in"></span>During trip</button>
+      <button class="sbtn" onclick="go('rebook')" id="b-rebook"><span class="sdot d-in"></span>Book again</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Legend</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#717171;margin-bottom:4px"><span class="sdot d-out"></span>Logged out</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#717171"><span class="sdot d-in"></span>Logged in</div>
+    </div>
+  </div>
+
+  <!-- Phone -->
+  <div class="phone-col">
+    <div class="phone">
+      <div class="pstatus">
+        <span>9:41</span>
+        <div class="pstatus-icons">
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><rect x="0" y="4.5" width="3" height="7.5" rx="1" fill="#111"/><rect x="4.7" y="2.5" width="3" height="9.5" rx="1" fill="#111"/><rect x="9.4" y="0.5" width="3" height="11.5" rx="1" fill="#111"/><rect x="14.1" y="0" width="2.7" height="12" rx="1" fill="#ddd"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 3C10.2 3 12.2 3.9 13.6 5.4L15.1 3.9C13.3 2 10.8 1 8 1C5.2 1 2.7 2 0.9 3.9L2.4 5.4C3.8 3.9 5.8 3 8 3Z" fill="#111"/><path d="M8 6C9.4 6 10.6 6.6 11.5 7.5L13 6C11.7 4.7 10 4 8 4C6 4 4.3 4.7 3 6L4.5 7.5C5.4 6.6 6.6 6 8 6Z" fill="#111"/><circle cx="8" cy="10.5" r="1.8" fill="#111"/></svg>
+          <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x="0.5" y="0.5" width="22" height="12" rx="3.5" stroke="#111" stroke-opacity=".35"/><rect x="2" y="2" width="17" height="9" rx="2" fill="#111"/><path d="M24 5C24.9 5.4 24.9 7.6 24 8" stroke="#111" stroke-opacity=".4" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+
+      <div class="search-pill">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#717171" stroke-width="1.4"/><line x1="9.5" y1="9.5" x2="13" y2="13" stroke="#717171" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Start your search
+      </div>
+
+      <div class="tabs-row">
+        <button class="ptab">All</button>
+        <button class="ptab">🏠 Homes</button>
+        <button class="ptab">📍 Experiences</button>
+        <button class="ptab on">🔔 Services</button>
+      </div>
+
+      <div class="screen" id="scr"></div>
+
+      <div class="bot-nav">
+        <div class="bnav on">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Explore
+        </div>
+        <div class="bnav">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Wishlists
+        </div>
+        <div class="bnav">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Trips
+        </div>
+        <div class="bnav">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Messages
+        </div>
+        <div class="bnav">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Profile
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right panel -->
+  <div class="right-col">
+    <div class="info-card">
+      <h4>Interaction flow</h4>
+      <div id="flow-list"></div>
+    </div>
+    <div class="info-card">
+      <h4>Behavior</h4>
+      <div id="tag-area" style="margin-bottom:6px"></div>
+      <p id="note-txt" style="font-size:11px;color:#717171;line-height:1.6"></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var S = 'null', step = 0;
+
+function esvcRow(icon, name, sub, tappable) {
+  var onclick = tappable ? ' onclick="tapService(\''+name+'\')"' : '';
+  return '<div class="esvc-row"'+onclick+'>'+
+    '<div class="esvc-icon">'+icon+'</div>'+
+    '<div class="esvc-text"><div class="esvc-name">'+name+'</div><div class="esvc-sub">'+sub+'</div></div>'+
+    '<div class="esvc-thumb img-ph">'+icon+'</div>'+
+    '</div>';
+}
+
+function svgHeart() {
+  return '<div class="heart"><svg width="12" height="12" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>';
+}
+
+function photoCard(bg, badge, name, detail) {
+  var b = badge ? '<div class="badge">'+badge+'</div>' : '';
+  return '<div class="pcard">'+
+    '<div class="pcard-img img-ph" style="background:'+bg+'">'+b+svgHeart()+'</div>'+
+    '<div class="pcard-info"><div class="pcard-name">'+name+'</div><div class="pcard-price">'+detail+'</div></div>'+
+    '</div>';
+}
+
+function recCard(bg, name, host) {
+  return '<div class="rec-card">'+
+    '<div class="rec-img img-ph" style="background:'+bg+'">'+svgHeart()+'</div>'+
+    '<div class="rec-name">'+name+'</div><div class="rec-host">'+host+'</div>'+
+    '</div>';
+}
+
+function essentials(title) {
+  return '<div class="sec-hd"><div><div class="sec-title">'+title+'</div></div></div>'+
+    esvcRow('🚗','Rental cars','Arrive to a well-stocked fridge', true)+
+    esvcRow('🛒','Groceries','Arrive to a well-stocked fridge', false)+
+    esvcRow('🧳','Airport pickups','Schedule a ride in advance', false);
+}
+
+function photographers() {
+  return '<div class="sec-hd" style="margin-top:20px">'+
+    '<div><div class="sec-title">Photographers</div><div class="sec-sub">Capture your Paris memories</div></div>'+
+    '<div class="sec-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>'+
+    '</div>'+
+    '<div class="photo-grid">'+
+    photoCard('#c2b09a','Popular','Holiday photoshoot','From $150 &nbsp;★ 4.97')+
+    photoCard('#b5a494','Popular','Professional portraits','From $175 &nbsp;★ 4.99')+
+    '</div>';
+}
+
+function chefs() {
+  return '<div class="sec-hd" style="margin-top:20px">'+
+    '<div><div class="sec-title">Chefs</div><div class="sec-sub">Enjoy your own private chef</div></div>'+
+    '<div class="sec-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>'+
+    '</div>'+
+    '<div class="photo-grid">'+
+    photoCard('#b86020','','Seasonal tasting menu by Alexander','From $100/guest &nbsp;★ 5.0')+
+    photoCard('#7a9e50','','Michelin-quality fare by Maxwell','From $300/guest &nbsp;★ 5.0')+
+    '</div>';
+}
+
+function recentlyViewed() {
+  return '<div class="sec-hd" style="margin-top:20px">'+
+    '<div class="sec-title">Recently viewed</div>'+
+    '<div class="sec-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>'+
+    '</div>'+
+    '<div class="rec-scroll">'+
+    recCard('#c4702a','Curated dining experience','Hosted by Lynn')+
+    recCard('#8fad6c','Custom, exclusive meals','Hosted by Lynn')+
+    recCard('#c8b8a2','Massage by Laurent','Hosted by Lynn')+
+    '</div>';
+}
+
+function heroCard(illo, title, sub, btnLabel) {
+  return '<div class="hero-card">'+
+    '<span class="hero-illo">'+illo+'</span>'+
+    '<div class="hero-title">'+title+'</div>'+
+    '<div class="hero-sub">'+sub+'</div>'+
+    '<button class="hero-btn" onclick="tapContinue()">'+btnLabel+'</button>'+
+    '</div>';
+}
+
+var screens = {
+  null: function() {
+    return essentials('Essential services') + photographers() + chefs() +
+      '<div class="sec-hd" style="margin-top:20px"><div><div class="sec-title">Hair styling</div></div>'+
+      '<div class="sec-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div></div>'+
+      '<div class="photo-grid">'+
+      photoCard('#d4c0b0','Guest favorite','Hair styling with Isabel','From $90 &nbsp;★ 4.8')+
+      photoCard('#c0b0a8','Guest favorite','Bridal makeup artist','From $110 &nbsp;★ 4.9')+
+      '</div>';
+  },
+  prev: function() {
+    return '<div class="continue-card">'+
+      '<div class="continue-thumb img-ph" style="background:#c8a87c"></div>'+
+      '<div><h4>Continue searching for services in Paris</h4><p>Dec 22-28 · 4 guests ›</p></div>'+
+      '</div>'+
+      recentlyViewed()+
+      essentials('Essential services for Paris')+
+      photographers()+chefs();
+  },
+  trip: function() {
+    return heroCard('🚙','Looking to rent a car in Paris?','Get 15% off your rental.','Find a car')+
+      essentials('Essential services for Paris')+
+      recentlyViewed()+
+      photographers()+chefs();
+  },
+  after: function() {
+    return heroCard('🧳','Storage your bags until your car is ready','Get 15% off luggage storage.','Find a storage')+
+      essentials('More services in Paris')+
+      photographers()+chefs();
+  },
+  during: function() {
+    return heroCard('🛒','Groceries delivered to your Airbnb in 1 hour','Skip the run to the store — delivery on us.','Order now')+
+      essentials('More services in Paris')+
+      photographers()+chefs();
+  },
+  rebook: function() {
+    return heroCard('🚗','Do you need to rent a SUV again?','Last trip you rented a Standard SUV for $79.','Find new car')+
+      essentials('Essential services for Paris')+
+      photographers()+chefs();
+  }
+};
+
+var flows = {
+  null:   { loggedIn:false, steps:['Services tab','Tap Rental cars','Interstitial opens','Tap Continue','Sign-in gate'], note:'Logged out. Sign-in gate appears only after tapping Continue in the interstitial — not on first tap.' },
+  prev:   { loggedIn:false, steps:['Services tab','Recent context shown','Tap Rental cars','Interstitial opens','Tap Continue','Sign-in gate'], note:'Location from recent search prefills context. Sign-in still deferred to after Continue.' },
+  trip:   { loggedIn:true,  steps:['Services tab','Hero interstitial','Dates prefilled','Tap Find a car','→ Booking webview'], note:'Logged in with upcoming stay. No sign-in gate — direct to webview.' },
+  after:  { loggedIn:true,  steps:['Post-booking','Complementary interstitial','Tap Continue','→ Booking webview'], note:'Logged in. Upsell for complementary service shown after booking.' },
+  during: { loggedIn:true,  steps:['In-stay context','High-intent interstitial','Tap Order now','→ Booking webview'], note:'Active stay. Urgent copy. Direct booking, no sign-in gate.' },
+  rebook: { loggedIn:true,  steps:['Post-trip','Re-book interstitial','Tap Find new car','→ Booking webview'], note:'Logged in, no active trip. Last service resurfaces for rebooking.' }
+};
+
+function tapService(name) {
+  if (name === 'Rental cars') openInterstitial();
+}
+
+function openInterstitial() {
+  var f = flows[S];
+  var prefill = f.loggedIn ? '<p class="sheet-ctx">Paris · Dec 22–28 · 4 guests</p>' : '';
+  var scr = document.getElementById('scr');
+  scr.dataset.orig = scr.innerHTML;
+  scr.innerHTML = '<div class="sheet-wrap">'+
+    '<div class="sheet">'+
+    '<div class="sheet-handle"></div>'+
+    '<div class="sheet-top"><button class="sheet-close" onclick="closeSheet()">✕</button></div>'+
+    '<span class="sheet-illo">🚗</span>'+
+    '<div class="sheet-title">Rent a car for your trip</div>'+
+    '<div class="sheet-sub">Get 20% in Airbnb credit</div>'+
+    prefill+
+    '<button class="btn-dark" onclick="tapContinue()">Continue</button>'+
+    '<p class="sheet-legal">By selecting "Continue", you allow Airbnb and the provider to share your contact, stay, and order information. You agree to their Terms and Privacy Policy.</p>'+
+    '</div></div>';
+  step = 2; renderFlow();
+}
+
+function tapContinue() {
+  var f = flows[S];
+  if (!f.loggedIn) {
+    openSignIn();
+  } else {
+    var scr = document.getElementById('scr');
+    scr.innerHTML = '<div class="sheet-wrap">'+
+      '<div class="sheet">'+
+      '<div class="sheet-handle"></div>'+
+      '<p style="text-align:center;font-size:15px;font-weight:700;color:#222;margin-bottom:8px">Opening car rentals…</p>'+
+      '<p style="text-align:center;font-size:13px;color:#717171;margin-bottom:22px">Taking you to the booking view</p>'+
+      '<button class="btn-dark" onclick="closeSheet()">← Back</button>'+
+      '</div></div>';
+    step = f.steps.length - 1; renderFlow();
+  }
+}
+
+function openSignIn() {
+  var scr = document.getElementById('scr');
+  scr.innerHTML = '<div class="sheet-wrap">'+
+    '<div class="sheet">'+
+    '<div class="sheet-handle"></div>'+
+    '<div class="signin-wrap">'+
+    '<p>Sign in to book services for your trip</p>'+
+    '<button class="btn-dark">Sign in</button>'+
+    '<button class="btn-outline" onclick="closeSheet()">Continue as guest</button>'+
+    '</div></div></div>';
+  step = flows[S].steps.length - 1; renderFlow();
+}
+
+function closeSheet() {
+  var scr = document.getElementById('scr');
+  scr.innerHTML = scr.dataset.orig || screens[S]();
+  step = 0; renderFlow();
+}
+
+function renderFlow() {
+  var f = flows[S];
+  document.getElementById('flow-list').innerHTML = f.steps.map(function(s,i){
+    return '<div class="flow-item"><div class="fnum'+(i===step?' cur':'')+'">'+( i+1)+'</div><span>'+s+'</span></div>';
+  }).join('');
+  document.getElementById('tag-area').innerHTML = f.loggedIn
+    ? '<span class="tag tag-in">Logged in</span>'
+    : '<span class="tag tag-out">Logged out</span>';
+  document.getElementById('note-txt').textContent = f.note;
+}
+
+function go(key) {
+  S = key; step = 0;
+  document.querySelectorAll('.sbtn').forEach(function(b){ b.classList.remove('on'); });
+  document.getElementById('b-'+key).classList.add('on');
+  var html = screens[key]();
+  document.getElementById('scr').innerHTML = html;
+  document.getElementById('scr').dataset.orig = html;
+  renderFlow();
+}
+
+go('null');
+</script>
+</body>
+</html>
