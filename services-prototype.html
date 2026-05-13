@@ -6,679 +6,765 @@
 <title>Services — Availability & Merchandising Prototype</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* ── Airbnb DLS tokens ── */
 :root{
-  --bg:#f0ede8;--white:#fff;--text:#222;--muted:#717171;--hint:#b0b0b0;
-  --border:#e0e0e0;--light:#ebebeb;--surface:#f7f7f7;--pink:#FF385C;
-  --green:#008A6E;--sm:8px;--md:12px;--lg:16px;--pill:30px;
+  --hof:#222222;
+  --foggy:#6A6A6A;
+  --deco:#DDDDDD;
+  --faint:#EBEBEB;
+  --white:#FFFFFF;
+  --surface:#F7F7F7;
+  --black:#000000;
+  --airbnb-red:#DA1249;
+  --bg:#F0EDE8;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,#c4bfba 1px,transparent 1px);background-size:22px 22px;opacity:.18;pointer-events:none;z-index:0}
+@font-face{font-family:'Airbnb Cereal VF';src:local('-apple-system'),local('SF Pro Text');font-weight:100 900}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;
+  background:var(--bg);color:var(--hof);min-height:100vh;
+}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,#c4bfba 1px,transparent 1px);background-size:22px 22px;opacity:.15;pointer-events:none;z-index:0}
 
-/* ── Page chrome ── */
-.hdr{background:var(--white);border-bottom:1px solid var(--light);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2}
-.logo{font-size:21px;font-weight:800;color:var(--pink);letter-spacing:-.5px}
-.meta{font-size:11px;color:var(--muted);text-align:right;line-height:1.6}
-.meta strong{color:var(--text);font-weight:600}
+/* ── Page header ── */
+.hdr{background:var(--white);border-bottom:1px solid var(--faint);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2}
+.hdr-logo{font-size:20px;font-weight:800;color:var(--airbnb-red);letter-spacing:-.5px}
+.hdr-meta{font-size:11px;color:var(--foggy);text-align:right;line-height:1.6}
+.hdr-meta strong{color:var(--hof);font-weight:600}
 
 /* ── Layout ── */
-.layout{display:flex;gap:18px;max-width:960px;margin:24px auto;padding:0 18px;align-items:flex-start;position:relative;z-index:1}
+.layout{display:flex;gap:18px;max-width:1020px;margin:24px auto;padding:0 18px;align-items:flex-start;position:relative;z-index:1}
 
-/* ── Sidebar ── */
-.sidebar{width:168px;flex-shrink:0;position:sticky;top:18px}
-.slabel{font-size:10px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.08em;margin:13px 0 4px 3px}
-.slabel:first-child{margin-top:0}
-.sbtn{display:flex;align-items:center;gap:7px;width:100%;text-align:left;padding:7px 8px;font-size:12px;background:none;border:1px solid transparent;border-radius:var(--sm);cursor:pointer;color:var(--muted);margin-bottom:1px;font-family:inherit;line-height:1.3;transition:all .12s}
-.sbtn:hover{background:var(--white);color:var(--text)}
-.sbtn.on{background:var(--white);border-color:var(--border);color:var(--text);font-weight:600}
-.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.d-out{background:var(--pink)}.d-in{background:#1D9E75}
+/* ── Controls ── */
+.controls{width:220px;flex-shrink:0;position:sticky;top:18px}
+.ctrl-card{background:var(--white);border:1px solid var(--faint);border-radius:12px;padding:14px;margin-bottom:10px}
+.ctrl-card h3{font-size:10px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:11px}
+.url-box{font-size:10px;color:var(--foggy);background:var(--surface);border-radius:6px;padding:7px 9px;margin-bottom:11px;word-break:break-all;line-height:1.5;border:1px solid var(--faint);font-family:monospace}
+.url-base{color:var(--hof);font-weight:600}.url-param{color:#0066cc}
+.tog-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.tog-row:last-child{margin-bottom:0}
+.tog-row.off{opacity:.35;pointer-events:none}
+.tog-label{font-size:12px;color:var(--hof);font-weight:500;line-height:1.3}
+.tog-sub{font-size:10px;color:var(--foggy);font-weight:400;display:block;margin-top:1px}
+.tgrp{display:flex;border:1px solid var(--faint);border-radius:20px;overflow:hidden;flex-shrink:0}
+.tbtn{padding:5px 10px;font-size:11px;font-weight:500;background:var(--white);border:none;cursor:pointer;font-family:inherit;color:var(--foggy);transition:all .1s;white-space:nowrap}
+.tbtn.on{background:var(--hof);color:var(--white)}
+.tbtn.on.g{background:#1D9E75}
+.state-pill{background:var(--surface);border:1px solid var(--faint);border-radius:8px;padding:8px 10px;margin-bottom:10px}
+.state-pill strong{color:var(--hof);display:block;font-size:12px;margin-bottom:2px}
+.state-pill span{font-size:11px;color:var(--foggy);line-height:1.5}
+.info-card{background:var(--white);border:1px solid var(--faint);border-radius:12px;padding:11px;margin-bottom:9px}
+.info-card h4{font-size:10px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.fi{display:flex;align-items:flex-start;gap:7px;margin-bottom:7px;font-size:11px;color:var(--foggy);line-height:1.4}
+.fn{width:17px;height:17px;border-radius:50%;background:var(--surface);border:1px solid var(--faint);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:var(--hof)}
+.fn.cur{background:var(--hof);color:var(--white);border-color:var(--hof)}
+.tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;margin-bottom:5px}
+.tag-out{background:#ffeef0;color:#c8002a}.tag-in{background:#e1f5ee;color:#085041}.tag-mkt{background:#E3F2FD;color:#0D47A1}
 
-/* ── Phone ── */
+/* ── Phone shell ── */
 .phone-col{flex:1;display:flex;justify-content:center}
-.phone{width:310px;background:var(--white);border-radius:42px;border:2px solid #c8c8c8;overflow:hidden;box-shadow:0 14px 50px rgba(0,0,0,.14);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;color:var(--text)}
-.pstat{padding:14px 20px 4px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:#111}
-.spill{margin:3px 13px 9px;background:var(--white);border-radius:var(--pill);padding:9px 13px;display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);border:1px solid var(--border);box-shadow:0 1px 5px rgba(0,0,0,.05)}
-.tabrow{display:flex;gap:5px;padding:0 13px 10px;overflow:hidden}
-.ptab{padding:6px 10px;font-size:12px;font-weight:500;border-radius:var(--pill);border:1px solid var(--border);background:var(--white);color:var(--muted);white-space:nowrap;cursor:pointer;font-family:inherit;transition:all .12s}
-.ptab.on{background:var(--white);border-color:var(--text);color:var(--text);font-weight:700}
-.screen{padding:0 13px 22px;max-height:580px;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;position:relative}
+.phone{
+  width:393px;
+  background:var(--white);
+  border-radius:48px;
+  border:1.5px solid #ccc;
+  overflow:hidden;
+  box-shadow:0 16px 56px rgba(0,0,0,.16),0 4px 12px rgba(0,0,0,.08);
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;
+  color:var(--hof);
+  position:relative;
+}
+
+/* Status bar */
+.status-bar{padding:16px 28px 6px;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:700;color:var(--hof)}
+.sb-icons{display:flex;gap:5px;align-items:center}
+
+/* Search pill — DLS elevation/3 */
+.search-pill{
+  margin:6px 20px 10px;
+  background:var(--white);
+  border-radius:40px;
+  padding:0;
+  height:58px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-size:14px;font-weight:500;color:var(--hof);
+  border:.5px solid rgba(0,0,0,.08);
+  box-shadow:0 0 0 1px rgba(0,0,0,.02),0 8px 24px rgba(0,0,0,.1);
+}
+
+/* Category tabs bar */
+.cat-bar{display:flex;gap:8px;padding:0 20px 12px;overflow:hidden}
+.cat-pill{
+  display:flex;align-items:center;gap:4px;
+  padding:8px 14px;
+  border-radius:40px;
+  font-size:14px;
+  font-weight:400;
+  white-space:nowrap;
+  cursor:pointer;
+  background:linear-gradient(171.61deg,#F3F3F3 8.33%,#FFFFFF 53.13%);
+  box-shadow:0 .8px .8px rgba(0,0,0,.15),inset 0 1px 1.5px .2px #fff,inset 0 10px 15px rgba(58,58,58,.02),inset 0 -1.5px .8px rgba(255,255,255,.6),inset 0 -1.5px .75px rgba(0,0,0,.3);
+  border:none;
+  font-family:inherit;
+  color:var(--hof);
+}
+.cat-pill.on{
+  background:linear-gradient(0deg,rgba(68,56,39,.1),rgba(68,56,39,.1)),linear-gradient(152.26deg,#fff 16.98%,#F5F5F5 82.52%);
+  box-shadow:0 1px .5px #fff,0 -.5px 1px rgba(0,0,0,.15),0 -1.2px .5px 1px rgba(0,0,0,.05),0 15px 30px rgba(0,0,0,.05),inset -.2px -1px 1px #fff,inset .5px .7px 2.5px rgba(0,0,0,.2),inset -1px -3px 8px rgba(0,0,0,.05),inset .5px 2px 4px rgba(0,0,0,.1),inset 1px 6px 6px 2px rgba(0,0,0,.1);
+}
+
+/* Screen scroll area */
+.screen{padding:0 24px 24px;height:620px;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;position:relative}
 .screen::-webkit-scrollbar{display:none}
 
-/* ── Section headers ── */
-.sh{display:flex;justify-content:space-between;align-items:flex-start;margin:16px 0 9px}
-.st{font-size:17px;font-weight:700;color:var(--text)}.ss{font-size:13px;color:var(--muted);margin-top:2px}
-.sa{width:29px;height:29px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+/* Section header — 18px/600 */
+.sec-hd{display:flex;justify-content:space-between;align-items:center;margin:20px 0 12px}
+.sec-title{font-size:18px;font-weight:600;color:var(--hof);letter-spacing:-.18px;line-height:24px}
+.sec-arrow{width:32px;height:32px;border-radius:100px;background:#F2F2F2;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
-/* ── Service icon carousel ── */
-.svc-row{display:flex;gap:9px;overflow:hidden}
-.svc-chip{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;flex-shrink:0}
-.chip-box{width:72px;height:72px;background:var(--surface);border-radius:var(--md);display:flex;align-items:center;justify-content:center;border:1px solid var(--light);transition:background .12s;overflow:hidden}
-.chip-box img,.chip-box .chi{width:48px;height:48px;object-fit:contain}
-.chip-box .chi{font-size:32px;line-height:1;display:flex;align-items:center;justify-content:center}
-.svc-chip:hover .chip-box{background:#efefef}
-.svc-chip span{font-size:11px;color:var(--muted);text-align:center}
+/* ── Service tile — 96×96, br:20px ── */
+.svc-tiles{display:flex;gap:12px;overflow:hidden}
+.svc-tile{display:flex;flex-direction:column;align-items:flex-start;gap:8px;width:96px;cursor:pointer;flex-shrink:0}
+.svc-tile-img{
+  width:96px;height:96px;
+  background:var(--surface);
+  border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .12s;
+  position:relative;overflow:hidden;
+}
+.svc-tile-img:hover{background:#efefef}
+.svc-tile-illo{font-size:40px;line-height:1}
+.svc-tile-label{font-size:12px;font-weight:500;color:var(--hof);line-height:16px;padding:0 4px}
 
-/* ── Essential service row ── */
-.esrow{display:flex;align-items:center;padding:10px 11px;background:var(--surface);border-radius:var(--md);margin-bottom:7px;cursor:pointer;transition:background .12s;border:1px solid transparent}
-.esrow:hover{background:#efefef}
-.esico{width:44px;height:44px;background:var(--white);border-radius:9px;display:flex;align-items:center;justify-content:center;margin-right:11px;flex-shrink:0;font-size:20px;border:1px solid var(--light)}
-.estxt{flex:1}.esn{font-size:13px;font-weight:500;color:var(--text)}.ess{font-size:11px;color:var(--muted);margin-top:1px}
-.esth{width:44px;height:44px;border-radius:9px;background:#e8e4df;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
+/* ── Photo cards — 167×160, br:20px ── */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.pcard{display:flex;flex-direction:column;gap:8px;cursor:pointer}
+.pcard-photo{
+  width:100%;height:160px;
+  background:#EBEBEB;
+  border-radius:20px;
+  position:relative;overflow:hidden;
+  box-shadow:0 6px 24px rgba(0,0,0,.12);
+}
+.pcard-photo-bg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px}
+.pcard-badge{
+  position:absolute;top:10px;left:10px;
+  background:rgba(255,255,255,.8);
+  border:1px solid rgba(255,255,255,.16);
+  backdrop-filter:blur(16px);
+  border-radius:40px;
+  padding:4.5px 10px;
+  font-size:11px;font-weight:600;color:var(--hof);
+  line-height:15px;
+}
+.pcard-heart{
+  position:absolute;top:12px;right:14px;
+  width:20px;height:20px;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.25));
+}
+.pcard-meta{padding:0 2px}
+.pcard-name{font-size:13px;font-weight:500;color:var(--hof);line-height:16px}
+.pcard-price{font-size:11px;color:var(--foggy);line-height:13px;margin-top:4px}
+.pcard-rating{display:flex;align-items:center;gap:2px;font-size:11px;color:var(--foggy);margin-top:2px}
+.star-icon{width:8px;height:8px;background:var(--foggy);display:block;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 
-/* ── Photo cards ── */
-.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.pcard{border-radius:11px;overflow:hidden;cursor:pointer}
-.pcimg{width:100%;height:110px;border-radius:11px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.badge{position:absolute;top:7px;left:7px;background:rgba(255,255,255,.92);color:var(--text);font-size:10px;font-weight:700;padding:3px 7px;border-radius:20px}
-.hrt{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center}
-.pcinfo{padding:6px 1px 0}.pcn{font-size:12px;font-weight:500;color:var(--text);line-height:1.3}.pcp{font-size:11px;color:var(--muted);margin-top:1px}
-
-/* ── Recently viewed ── */
-.rvrow{display:flex;gap:9px;overflow:hidden}
-.rvcard{flex-shrink:0;width:86px}
-.rvimg{width:86px;height:78px;border-radius:9px;background:#e8e4df;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.rvn{font-size:11px;font-weight:500;color:var(--text);margin-top:4px;line-height:1.3}.rvh{font-size:10px;color:var(--muted)}
+/* ── Recently viewed scroll ── */
+.rv-scroll{display:flex;gap:11px;overflow:hidden}
+.rv-card{flex-shrink:0;width:167px}
+.rv-photo{width:167px;height:120px;background:#EBEBEB;border-radius:20px;position:relative;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:36px}
+.rv-name{font-size:13px;font-weight:500;color:var(--hof);margin-top:8px;line-height:16px}
+.rv-host{font-size:11px;color:var(--foggy);margin-top:4px}
 
 /* ── Continue search card ── */
-.cont{background:var(--white);border:1px solid var(--light);border-radius:var(--lg);padding:12px;margin-bottom:4px;display:flex;align-items:center;gap:11px;cursor:pointer}
-.cont-th{width:54px;height:54px;border-radius:9px;background:#e8e4df;flex-shrink:0;font-size:22px;display:flex;align-items:center;justify-content:center}
-.cont h4{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;line-height:1.3}.cont p{font-size:11px;color:var(--muted)}
+.cont-card{
+  background:var(--white);
+  border:1px solid var(--faint);
+  border-radius:16px;
+  padding:16px;
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;
+  box-shadow:0 0 0 1px rgba(0,0,0,.02),0 8px 24px rgba(0,0,0,.1);
+  margin-bottom:4px;
+}
+.cont-thumb{width:60px;height:60px;border-radius:12px;background:#e8e4df;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px;overflow:hidden}
+.cont-card h4{font-size:15px;font-weight:600;color:var(--hof);margin-bottom:3px;line-height:1.3}
+.cont-card p{font-size:13px;color:var(--foggy)}
 
-/* ── Inline car spotlight card ── */
-.car-inline{background:var(--surface);border-radius:var(--lg);padding:11px 12px;margin-bottom:4px;display:flex;align-items:center;gap:10px;border:1px solid var(--light);cursor:pointer;transition:background .12s}
-.car-inline:hover{background:#efefef}
-.ci-ico{font-size:32px;flex-shrink:0}
-.ci-txt h4{font-size:13px;font-weight:600;color:var(--text);margin-bottom:1px}.ci-txt p{font-size:11px;color:var(--muted)}
-.ci-btn{margin-left:auto;padding:6px 11px;background:var(--white);border:1px solid var(--border);border-radius:var(--pill);font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0}
+/* ── Spotlight card (inline, small) ── */
+.spotlight-card{
+  width:100%;
+  min-height:116px;
+  background:var(--white);
+  border-radius:20px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.02),0 8px 24px rgba(0,0,0,.1);
+  display:flex;align-items:center;
+  padding:0 0 0 16px;
+  cursor:pointer;
+  overflow:hidden;
+}
+.sp-content{display:flex;flex-direction:column;justify-content:center;gap:10px;padding:14px 0;flex:1}
+.sp-text{padding:0 0 0 4px}
+.sp-title{font-size:16px;font-weight:500;color:var(--hof);line-height:20px}
+.sp-sub{font-size:12px;color:var(--foggy);line-height:16px;margin-top:3px}
+.sp-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:6px 12px;
+  background:#F2F2F2;
+  border-radius:16px;
+  font-size:12px;font-weight:500;color:var(--hof);
+  border:none;cursor:pointer;font-family:inherit;
+  width:fit-content;margin-top:4px;
+}
+.sp-img{width:100px;height:116px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:56px;overflow:hidden}
 
 /* ── XL Spotlight ── */
-.xl{background:var(--surface);border-radius:var(--lg);padding:20px 14px 16px;margin-bottom:4px;text-align:center;border:1px solid var(--light)}
-.xl-illo{font-size:70px;display:block;margin-bottom:10px;line-height:1}
-.xl-title{font-size:19px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:5px}
-.xl-sub{font-size:13px;color:var(--muted);margin-bottom:14px}
-.xl-btn{display:block;width:100%;padding:12px;background:var(--white);color:var(--text);border-radius:var(--pill);font-size:14px;font-weight:500;border:1px solid var(--border);cursor:pointer;font-family:inherit;transition:background .12s}
-.xl-btn:hover{background:#efefef}
+.xl-card{
+  background:var(--surface);
+  border-radius:24px;
+  padding:16px 20px 20px;
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+  border:1px solid var(--faint);
+  text-align:center;
+}
+.xl-illo{font-size:80px;line-height:1}
+.xl-title{font-size:22px;font-weight:700;color:var(--hof);line-height:1.2;margin-bottom:4px}
+.xl-sub{font-size:15px;color:var(--foggy);margin-bottom:4px}
+.xl-btn{
+  width:100%;padding:14px;
+  background:var(--white);color:var(--hof);
+  border-radius:40px;font-size:15px;font-weight:500;
+  border:1px solid var(--faint);cursor:pointer;font-family:inherit;
+  transition:background .12s;
+}
+.xl-btn:hover{background:#f0f0f0}
 
-/* ── Bottom nav ── */
-.botnav{border-top:1px solid var(--light);padding:8px 0 6px;display:flex;justify-content:space-around;background:var(--white)}
-.bn{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;font-weight:500;color:var(--muted)}
-.bn.on{color:var(--pink)}
+/* ── Bottom nav — DLS ── */
+.bot-nav{
+  border-top:1px solid var(--faint);
+  padding:0;height:90px;
+  display:flex;flex-direction:column;
+  background:var(--white);
+}
+.bot-nav-inner{display:flex;justify-content:space-around;padding:0 4px;height:56px}
+.bnav-item{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;flex:1;height:56px;cursor:pointer;
+}
+.bnav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center}
+.bnav-icon svg{width:22px;height:22px}
+.bnav-lbl{font-size:10px;font-weight:500;color:#6C6C6C;line-height:12px}
+.bnav-item.on .bnav-lbl{color:var(--airbnb-red)}
+.bnav-item.on .bnav-icon svg{stroke:var(--airbnb-red)}
+.bot-nav-home{height:34px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px}
+.home-ind{width:135px;height:5px;background:var(--black);border-radius:100px;opacity:.18}
 
-/* ── Modal interstitial (centered, not sheet) ── */
-.modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:10;padding:16px}
-.modal{background:var(--white);border-radius:20px;padding:20px 18px 22px;width:100%;position:relative}
-.modal-x{position:absolute;top:12px;right:12px;width:28px;height:28px;background:#f0f0f0;border:none;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;font-family:inherit;color:var(--text)}
-.modal-x:hover{background:#e4e4e4}
-.modal-car{font-size:72px;text-align:center;display:block;margin:4px 0 10px;line-height:1}
-.credit-pill{display:inline-block;background:#E8F5E9;color:#1B5E20;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;margin-bottom:10px}
-.modal-title{font-size:22px;font-weight:700;color:var(--text);text-align:center;line-height:1.2;margin-bottom:5px}
-.modal-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:14px}
-.modal-ctx{font-size:11px;color:var(--hint);text-align:center;margin-top:-8px;margin-bottom:12px}
-.btn-blk{display:block;width:100%;padding:14px;background:var(--text);color:var(--white);border-radius:var(--pill);font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:background .12s}
-.btn-blk:hover{background:#333}
-.modal-legal{font-size:10px;color:var(--hint);text-align:center;line-height:1.5;margin-top:6px}
+/* ── Modal overlay ── */
+.modal-bg{
+  position:absolute;inset:-1px;
+  background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;
+  z-index:10;padding:20px;
+}
+.modal{
+  background:var(--white);border-radius:24px;
+  padding:20px 20px 24px;width:100%;position:relative;
+}
+.modal-x{
+  position:absolute;top:14px;right:14px;
+  width:32px;height:32px;background:#F2F2F2;border:none;border-radius:100px;
+  cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;
+  font-family:inherit;color:var(--hof);
+}
+.credit-badge{
+  display:inline-block;font-size:12px;font-weight:600;
+  color:#267355;
+  padding:4px 10px;border-radius:20px;
+  background:rgba(38,115,85,.1);
+  margin-bottom:10px;
+}
+.modal-car{font-size:80px;text-align:center;display:block;margin:6px 0 12px;line-height:1}
+.modal-title{font-size:24px;font-weight:700;color:var(--hof);text-align:center;line-height:1.2;margin-bottom:6px}
+.modal-sub{font-size:15px;color:var(--foggy);text-align:center;margin-bottom:14px}
+.modal-ctx{font-size:12px;color:#aaa;text-align:center;margin-top:-8px;margin-bottom:12px}
+.btn-black{
+  display:block;width:100%;padding:16px;
+  background:var(--hof);color:var(--white);
+  border-radius:40px;font-size:16px;font-weight:600;
+  border:none;cursor:pointer;font-family:inherit;margin-bottom:8px;
+  transition:background .12s;
+}
+.btn-black:hover{background:#333}
+.modal-legal{font-size:11px;color:#aaa;text-align:center;line-height:1.5;margin-top:8px}
 
 /* ── Fullscreen overlays ── */
-.fullscreen{position:absolute;inset:0;z-index:20;background:var(--white);overflow-y:auto}
-
-/* Login */
-.login-wrap{padding:18px 16px 24px}
-.login-close{float:right;width:28px;height:28px;background:#f0f0f0;border:none;border-radius:50%;cursor:pointer;font-size:13px;font-family:inherit;color:var(--text)}
-.login-logo{font-size:32px;color:var(--pink);text-align:center;margin:10px 0 14px;display:block}
-.login-title{font-size:20px;font-weight:700;color:var(--text);text-align:center;margin-bottom:16px}
-.login-input{width:100%;padding:13px 14px;border:1px solid var(--border);border-radius:var(--md);font-size:14px;font-family:inherit;margin-bottom:11px;outline:none;color:var(--text)}
+.fs{position:absolute;inset:0;z-index:20;background:var(--white);overflow-y:auto;border-radius:0 0 44px 44px}
+.login-wrap{padding:20px 20px 28px}
+.login-x{float:right;width:32px;height:32px;background:#f0f0f0;border:none;border-radius:50%;cursor:pointer;font-size:14px;font-family:inherit;color:var(--hof)}
+.airbnb-logo{font-size:36px;color:var(--airbnb-red);text-align:center;display:block;margin:10px 0 16px}
+.login-title{font-size:22px;font-weight:700;color:var(--hof);text-align:center;margin-bottom:18px}
+.login-input{
+  width:100%;padding:14px 16px;
+  border:1px solid var(--faint);border-radius:12px;
+  font-size:15px;font-family:inherit;margin-bottom:12px;outline:none;color:var(--hof);
+}
 .login-input:focus{border-color:#888}
-.divider{text-align:center;font-size:12px;color:var(--muted);margin:10px 0}
-.social-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--md);font-size:13px;font-weight:500;background:var(--white);cursor:pointer;margin-bottom:7px;font-family:inherit;color:var(--text)}
-
-/* OTP */
-.otp-wrap{padding:18px 16px 24px}
-.otp-back{background:none;border:none;font-size:18px;cursor:pointer;margin-bottom:14px;display:block;color:var(--text)}
-.otp-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:5px}
-.otp-sub{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5}
-.otp-boxes{display:flex;gap:7px;margin-bottom:14px}
-.otp-box{flex:1;height:50px;border:1.5px solid var(--border);border-radius:var(--sm);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:600;color:var(--text)}
-.otp-box.f{border-color:var(--text)}
-.otp-resend{font-size:12px;color:var(--muted);margin-bottom:12px}
-.otp-resend a{color:var(--text);text-decoration:underline;cursor:pointer}
-.try-btn{display:block;width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--pill);font-size:14px;font-weight:500;background:var(--white);cursor:pointer;font-family:inherit;margin-bottom:9px;color:var(--text)}
-
-/* Loading */
-.loading-screen{position:absolute;inset:0;z-index:25;background:var(--white);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
-.spinner{width:30px;height:30px;border:2px solid var(--light);border-top-color:var(--text);border-radius:50%;animation:spin .75s linear infinite}
+.or-div{text-align:center;font-size:13px;color:var(--foggy);margin:12px 0}
+.social-btn{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  width:100%;padding:13px;
+  border:1px solid var(--faint);border-radius:12px;
+  font-size:14px;font-weight:500;background:var(--white);
+  cursor:pointer;margin-bottom:8px;font-family:inherit;color:var(--hof);
+}
+.otp-wrap{padding:20px 20px 28px}
+.otp-back{background:none;border:none;font-size:20px;cursor:pointer;margin-bottom:16px;display:block;color:var(--hof)}
+.otp-title{font-size:22px;font-weight:700;color:var(--hof);margin-bottom:6px}
+.otp-sub{font-size:14px;color:var(--foggy);margin-bottom:20px;line-height:1.5}
+.otp-boxes{display:flex;gap:8px;margin-bottom:16px}
+.otp-box{flex:1;height:56px;border:1.5px solid var(--faint);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:600;color:var(--hof)}
+.otp-box.f{border-color:var(--hof)}
+.otp-resend{font-size:13px;color:var(--foggy);margin-bottom:14px}
+.otp-resend a{color:var(--hof);text-decoration:underline;cursor:pointer}
+.try-btn{display:block;width:100%;padding:14px;border:1px solid var(--faint);border-radius:40px;font-size:15px;font-weight:500;background:var(--white);cursor:pointer;font-family:inherit;margin-bottom:10px;color:var(--hof)}
+.loading-fs{position:absolute;inset:0;z-index:25;background:var(--white);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;border-radius:0 0 44px 44px}
+.spinner{width:32px;height:32px;border:2px solid var(--faint);border-top-color:var(--hof);border-radius:50%;animation:spin .75s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* Webview */
-.webview{position:absolute;inset:0;z-index:26;background:var(--white);overflow-y:auto}
-.wv-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 13px 10px;border-bottom:1px solid var(--light);position:sticky;top:0;background:var(--white)}
-.wv-exit{padding:5px 13px;border:1px solid var(--border);border-radius:var(--pill);font-size:13px;font-weight:500;background:var(--white);cursor:pointer;font-family:inherit;color:var(--text)}
-.wv-title{font-size:15px;font-weight:600;color:var(--text)}
-.wv-body{padding:12px 13px 20px}
-.wv-search{display:flex;align-items:flex-start;gap:8px;background:var(--surface);border-radius:20px;padding:11px 14px;margin-bottom:11px;border:1px solid var(--light)}
-.wv-search-ico{flex-shrink:0;margin-top:2px;color:var(--muted)}
-.wv-search-txt{font-size:13px;font-weight:500;color:var(--text);line-height:1.3}
-.wv-search-sub{font-size:11px;color:var(--muted)}
-.chips{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:1px}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex-shrink:0;display:flex;align-items:center;gap:4px;padding:7px 12px;border:none;border-radius:var(--pill);font-size:12px;font-weight:600;background:var(--text);color:var(--white);cursor:pointer;font-family:inherit}
-.chip.light{background:var(--white);color:var(--text);border:1px solid var(--border)}
-.credit-box{background:var(--white);border:1px solid var(--light);border-radius:var(--lg);padding:13px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.credit-box-txt p{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
-.credit-box-txt span{font-size:12px;color:var(--muted)}
-.credit-box-txt a{color:var(--text);text-decoration:underline}
-.credit-tag{font-size:28px}
-.car-card{background:var(--white);border:1px solid var(--light);border-radius:var(--lg);padding:12px;margin-bottom:10px;display:flex;gap:11px;align-items:flex-start;cursor:pointer;transition:border-color .12s}
-.car-card:hover{border-color:var(--border)}
-.car-photo{width:80px;height:58px;background:#f4f0ec;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.car-photo img{width:100%;height:100%;object-fit:contain}
-.car-photo .cph{font-size:32px}
-.car-info{flex:1;min-width:0}
-.brand-logo{font-size:11px;font-weight:800;letter-spacing:.05em;margin-bottom:3px}
-.brand-sixt{color:#FF5A00}.brand-hertz{color:#FFD700;-webkit-text-stroke:1px #c8a000}
-.car-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px}
-.car-sim{font-size:12px;color:var(--muted);margin-bottom:3px}
-.car-detail{font-size:11px;color:var(--muted);margin-bottom:5px;line-height:1.4}
-.car-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
-.ctag{font-size:10px;font-weight:500;padding:3px 7px;border-radius:4px;background:var(--surface);color:var(--muted);border:1px solid var(--light)}
-.ctag.green{background:#E8F5E9;color:#1B5E20;border-color:#A5D6A7}
-.car-price{font-size:13px;font-weight:700;color:var(--text);margin-top:2px}
-.car-orig{font-size:12px;color:var(--muted);text-decoration:line-through;margin-right:4px}
-
-/* Email screen */
-.email-screen{background:var(--white);position:absolute;inset:0;z-index:5;overflow-y:auto}
-.email-hdr{border-bottom:1px solid var(--light);padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.8}
-.email-hdr a{color:var(--pink)}
-.email-body{padding:16px 14px}
-.email-airbnb{font-size:20px;color:var(--pink);margin-bottom:12px;display:block}
-.email-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.3}
-.email-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
-.email-cta{display:block;width:100%;padding:13px;background:var(--pink);color:var(--white);border-radius:var(--pill);font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;text-align:center}
-
-/* Trips tab */
-.trips-hdr{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 13px 4px}
-.trips-city{font-size:22px;font-weight:700;color:var(--text)}
-.trips-sub{font-size:14px;color:var(--muted);margin-top:1px}
-.trip-card{margin:0 13px 13px;border-radius:var(--lg);overflow:hidden;border:1px solid var(--light);cursor:pointer}
-.trip-photo{width:100%;height:136px;background:linear-gradient(135deg,#7a9e50,#4a6e2a);display:flex;align-items:center;justify-content:center;position:relative}
-.trip-label{position:absolute;top:9px;left:9px;background:var(--white);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:var(--text)}
-.trip-info{padding:12px 13px 13px;background:var(--white)}
-.trip-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px}
-.trip-dates{font-size:12px;color:var(--muted);margin-bottom:9px}
-.trip-avs{display:flex;align-items:center;gap:5px}
-.av{width:25px;height:25px;border-radius:50%;border:2px solid var(--white);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
-.inv-btn{padding:6px 12px;border:1px solid var(--border);border-radius:var(--pill);font-size:11px;font-weight:500;background:var(--white);cursor:pointer;font-family:inherit}
-
-/* Right panel */
-.rpanel{width:182px;flex-shrink:0;position:sticky;top:18px}
-.rcard{background:var(--white);border:1px solid var(--light);border-radius:var(--md);padding:11px;margin-bottom:9px}
-.rcard h4{font-size:10px;font-weight:600;color:var(--hint);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
-.fi{display:flex;align-items:flex-start;gap:7px;margin-bottom:7px;font-size:11px;color:var(--muted);line-height:1.4}
-.fn{width:17px;height:17px;border-radius:50%;background:var(--surface);border:1px solid var(--border);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:var(--text)}
-.fn.cur{background:var(--text);color:var(--white);border-color:var(--text)}
-.tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;margin-bottom:7px}
-.tag-out{background:#ffeef0;color:#c8002a}.tag-in{background:#e1f5ee;color:#085041}
-.tommy-note{background:#FFFDE7;border:1px solid #FDD835;border-radius:var(--md);padding:10px;margin-bottom:9px}
-.tommy-note h4{font-size:10px;font-weight:700;color:#F57F17;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
-.tommy-note p{font-size:11px;color:#5D4037;line-height:1.5}
+.wv-fs{position:absolute;inset:0;z-index:26;background:var(--white);overflow-y:auto;border-radius:0 0 44px 44px}
+.wv-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;border-bottom:1px solid var(--faint);position:sticky;top:0;background:var(--white)}
+.wv-exit{padding:6px 16px;border:1px solid var(--faint);border-radius:40px;font-size:14px;font-weight:500;background:var(--white);cursor:pointer;font-family:inherit;color:var(--hof)}
+.wv-title{font-size:16px;font-weight:600;color:var(--hof)}
+.wv-body{padding:14px 16px 24px}
+.wv-search-row{display:flex;align-items:center;background:var(--white);border-radius:40px;padding:12px 16px;margin-bottom:12px;border:.5px solid rgba(0,0,0,.08);box-shadow:0 0 0 1px rgba(0,0,0,.02),0 8px 24px rgba(0,0,0,.1)}
+.wv-stxt{font-size:14px;font-weight:500;color:var(--hof)}.wv-ssub{font-size:12px;color:var(--foggy);margin-top:2px}
+.wv-chips{display:flex;gap:7px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.wv-chips::-webkit-scrollbar{display:none}
+.wchip{flex-shrink:0;padding:8px 14px;border:none;border-radius:40px;font-size:13px;font-weight:600;background:var(--hof);color:var(--white);cursor:pointer;font-family:inherit}
+.wchip.lt{background:var(--white);color:var(--hof);border:1px solid var(--faint)}
+.credit-box{background:var(--white);border:1px solid var(--faint);border-radius:16px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:flex-start;justify-content:space-between}
+.cb-txt p{font-size:15px;font-weight:700;color:var(--hof);margin-bottom:3px}
+.cb-txt span{font-size:13px;color:var(--foggy)}.cb-txt a{color:var(--hof);text-decoration:underline}
+.car-card{background:var(--white);border:1px solid var(--faint);border-radius:16px;padding:14px;margin-bottom:12px;display:flex;gap:12px;cursor:pointer}
+.car-card:hover{border-color:var(--deco)}
+.car-logo-box{width:80px;height:60px;background:var(--surface);border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.car-brand-txt{font-size:12px;font-weight:900;letter-spacing:.05em}
+.car-name{font-size:15px;font-weight:700;color:var(--hof);margin-bottom:2px}
+.car-sim{font-size:13px;color:var(--foggy);margin-bottom:3px}
+.car-detail{font-size:12px;color:var(--foggy);margin-bottom:6px;line-height:1.4}
+.car-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px}
+.ctag{font-size:11px;font-weight:500;padding:4px 8px;border-radius:6px;background:var(--surface);color:var(--foggy);border:1px solid var(--faint)}
+.ctag.g{background:#E8F5E9;color:#1B5E20;border-color:#A5D6A7}
+.car-price{font-size:14px;font-weight:700;color:var(--hof)}
+.car-orig{font-size:13px;color:var(--foggy);text-decoration:line-through;margin-right:4px}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <div class="logo">airbnb</div>
-  <div class="meta"><strong>Services — Availability &amp; Merchandising</strong><br>Prototype · DRI: Daniel Delphin · v4</div>
+  <div class="hdr-logo">airbnb</div>
+  <div class="hdr-meta"><strong>Services — Availability &amp; Merchandising</strong><br>Prototype v5 · DRI: Daniel Delphin</div>
 </div>
 
 <div class="layout">
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="slabel">Null states</div>
-    <button class="sbtn on" onclick="go('null-out')" id="b-null-out"><span class="sdot d-out"></span>Null — logged out</button>
-    <button class="sbtn" onclick="go('null-in')" id="b-null-in"><span class="sdot d-in"></span>Null — logged in</button>
-    <div class="slabel">Searched</div>
-    <button class="sbtn" onclick="go('prev')" id="b-prev"><span class="sdot d-out"></span>Prev searched</button>
-    <div class="slabel">Trip states</div>
-    <button class="sbtn" onclick="go('no-trip')" id="b-no-trip"><span class="sdot d-in"></span>No trip booked</button>
-    <button class="sbtn" onclick="go('trip')" id="b-trip"><span class="sdot d-in"></span>Trip booked</button>
-    <button class="sbtn" onclick="go('xl')" id="b-xl"><span class="sdot d-in"></span>XL Spotlight</button>
-    <button class="sbtn" onclick="go('after')" id="b-after"><span class="sdot d-in"></span>After booking</button>
-    <button class="sbtn" onclick="go('during')" id="b-during"><span class="sdot d-in"></span>During trip</button>
-    <button class="sbtn" onclick="go('rebook')" id="b-rebook"><span class="sdot d-in"></span>Book again</button>
-    <div class="slabel">Entry points</div>
-    <button class="sbtn" onclick="go('email')" id="b-email"><span class="sdot d-in"></span>Email / marketing</button>
-    <button class="sbtn" onclick="go('trips-tab')" id="b-trips-tab"><span class="sdot d-in"></span>Trips tab</button>
-    <div class="slabel">Legend</div>
-    <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#717171;margin-bottom:3px"><span class="sdot d-out"></span>Logged out</div>
-    <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:#717171"><span class="sdot d-in"></span>Logged in</div>
+  <!-- Controls -->
+  <div class="controls">
+    <div class="ctrl-card">
+      <h3>airbnb.com/services</h3>
+      <div class="url-box"><span class="url-base">airbnb.com/services</span></div>
+      <div class="tog-row">
+        <div class="tog-label">Logged in</div>
+        <div class="tgrp">
+          <button class="tbtn" id="t-li-no" onclick="tog('li','no')">No</button>
+          <button class="tbtn on g" id="t-li-yes" onclick="tog('li','yes')">Yes</button>
+        </div>
+      </div>
+      <div class="tog-row" style="margin-top:8px">
+        <div class="tog-label">Searched before<span class="tog-sub">No = Null · Yes = Prev search</span></div>
+        <div class="tgrp">
+          <button class="tbtn on" id="t-sr-no" onclick="tog('sr','no')">No</button>
+          <button class="tbtn" id="t-sr-yes" onclick="tog('sr','yes')">Yes</button>
+        </div>
+      </div>
+      <div class="tog-row off" id="stay-row" style="margin-top:8px">
+        <div class="tog-label">Stay booked<span class="tog-sub">Only if logged in</span></div>
+        <div class="tgrp">
+          <button class="tbtn on" id="t-st-no" onclick="tog('st','no')">No</button>
+          <button class="tbtn" id="t-st-yes" onclick="tog('st','yes')">Yes</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ctrl-card">
+      <h3>Marketing deep link</h3>
+      <div class="url-box" id="mkt-url-box"><span class="url-base">airbnb.com/services</span><span class="url-param">?marketing_category=carrentals</span></div>
+      <div class="tog-row">
+        <div class="tog-label">Active</div>
+        <div class="tgrp">
+          <button class="tbtn on" id="t-mk-no" onclick="tog('mk','no')">Off</button>
+          <button class="tbtn" id="t-mk-yes" onclick="tog('mk','yes')">On</button>
+        </div>
+      </div>
+      <div id="mkt-extra" style="display:none;margin-top:10px">
+        <div class="tog-row" style="margin-bottom:7px">
+          <div class="tog-label">Location<span class="tog-sub">Paris</span></div>
+          <div class="tgrp"><button class="tbtn" id="t-ml-no" onclick="tog('ml','no')">No</button><button class="tbtn on g" id="t-ml-yes" onclick="tog('ml','yes')">Yes</button></div>
+        </div>
+        <div class="tog-row" style="margin-bottom:7px">
+          <div class="tog-label">Dates<span class="tog-sub">Dec 22–28</span></div>
+          <div class="tgrp"><button class="tbtn" id="t-md-no" onclick="tog('md','no')">No</button><button class="tbtn on g" id="t-md-yes" onclick="tog('md','yes')">Yes</button></div>
+        </div>
+        <div class="tog-row">
+          <div class="tog-label">Guests<span class="tog-sub">4 guests</span></div>
+          <div class="tgrp"><button class="tbtn" id="t-mg-no" onclick="tog('mg','no')">No</button><button class="tbtn on g" id="t-mg-yes" onclick="tog('mg','yes')">Yes</button></div>
+        </div>
+        <div style="margin-top:9px;font-size:10px;color:var(--foggy);background:var(--surface);border-radius:6px;padding:7px 9px;border:1px solid var(--faint);line-height:1.5">
+          <strong style="color:var(--hof);display:block;margin-bottom:2px">URL:</strong>
+          <span id="mkt-url-live" style="font-family:monospace;color:#0066cc;word-break:break-all"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="state-pill"><strong id="sname"></strong><span id="sdesc"></span></div>
+    <div class="info-card"><h4>Flow</h4><div id="flow-list"></div></div>
+    <div class="info-card"><h4>Behavior</h4><div id="tag-area" style="margin-bottom:5px"></div><p id="note-txt" style="font-size:11px;color:var(--foggy);line-height:1.5"></p></div>
   </div>
 
   <!-- Phone -->
   <div class="phone-col">
     <div class="phone">
-      <div class="pstat">
+      <!-- Status bar -->
+      <div class="status-bar">
         <span>9:41</span>
-        <div style="display:flex;gap:4px;align-items:center">
-          <svg width="16" height="11" viewBox="0 0 17 12"><rect x="0" y="4.5" width="3" height="7.5" rx="1" fill="#111"/><rect x="4.7" y="2.5" width="3" height="9.5" rx="1" fill="#111"/><rect x="9.4" y=".5" width="3" height="11.5" rx="1" fill="#111"/><rect x="14.1" y="0" width="2.7" height="12" rx="1" fill="#ddd"/></svg>
-          <svg width="15" height="11" viewBox="0 0 15 12"><path d="M7.5 3C9.7 3 11.7 3.9 13.1 5.4L14.6 3.9C12.8 2 10.3 1 7.5 1C4.7 1 2.2 2 .4 3.9L1.9 5.4C3.3 3.9 5.3 3 7.5 3Z" fill="#111"/><path d="M7.5 6C8.9 6 10.1 6.6 11 7.5L12.5 6C11.2 4.7 9.5 4 7.5 4C5.5 4 3.8 4.7 2.5 6L4 7.5C4.9 6.6 6.1 6 7.5 6Z" fill="#111"/><circle cx="7.5" cy="10.5" r="1.8" fill="#111"/></svg>
-          <svg width="25" height="12" viewBox="0 0 26 13"><rect x=".5" y=".5" width="22" height="12" rx="3.5" stroke="#111" stroke-opacity=".35"/><rect x="2" y="2" width="17" height="9" rx="2" fill="#111"/><path d="M24 5C24.9 5.4 24.9 7.6 24 8" stroke="#111" stroke-opacity=".4" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <div class="sb-icons">
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><rect x="0" y="4" width="3" height="8" rx="1" fill="#222"/><rect x="4.7" y="2" width="3" height="10" rx="1" fill="#222"/><rect x="9.4" y="0" width="3" height="12" rx="1" fill="#222"/><rect x="14.1" y="0" width="2.7" height="12" rx="1" fill="#ddd"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 3C10 3 11.8 3.9 13.1 5.3L14.6 3.8C12.8 2 10.5 1 8 1S3.2 2 1.4 3.8L2.9 5.3C4.2 3.9 6 3 8 3Z" fill="#222"/><path d="M8 6.5C9.3 6.5 10.4 7 11.2 7.9L12.7 6.4C11.5 5.2 9.8 4.5 8 4.5S4.5 5.2 3.3 6.4L4.8 7.9C5.6 7 6.7 6.5 8 6.5Z" fill="#222"/><circle cx="8" cy="11" r="1.8" fill="#222"/></svg>
+          <svg width="26" height="13" viewBox="0 0 26 13" fill="none"><rect x=".5" y=".5" width="22" height="12" rx="3.5" stroke="#222" stroke-opacity=".35"/><rect x="2" y="2" width="17" height="9" rx="2" fill="#222"/><path d="M24 5C25 5.4 25 7.6 24 8" stroke="#222" stroke-opacity=".4" stroke-width="1.3" stroke-linecap="round"/></svg>
         </div>
       </div>
-      <div class="spill" id="search-pill">
-        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#717171" stroke-width="1.4"/><line x1="9.5" y1="9.5" x2="13" y2="13" stroke="#717171" stroke-width="1.4" stroke-linecap="round"/></svg>
+
+      <!-- Search pill -->
+      <div class="search-pill">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#222" stroke-width="1.5"/><line x1="9.5" y1="9.5" x2="13" y2="13" stroke="#222" stroke-width="1.5" stroke-linecap="round"/></svg>
         Start your search
       </div>
-      <div class="tabrow" id="main-tabs">
-        <button class="ptab">🏠 Homes</button>
-        <button class="ptab">📍 Experiences</button>
-        <button class="ptab on" id="tab-svc">🔔 Services</button>
-      </div>
-      <div class="screen" id="scr"></div>
-      <div class="botnav" id="botnav">
-        <div class="bn on" id="bn-explore"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Explore</div>
-        <div class="bn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Wishlists</div>
-        <div class="bn" id="bn-trips"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Trips</div>
-        <div class="bn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Messages</div>
-        <div class="bn" id="bn-login"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span id="bn-login-lbl">Log in</span></div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Right panel -->
-  <div class="rpanel">
-    <div id="tommy-box" class="tommy-note" style="display:none">
-      <h4>💬 Tommy's note</h4>
-      <p id="tommy-txt"></p>
-    </div>
-    <div class="rcard">
-      <h4>Flow</h4>
-      <div id="flow-list"></div>
-    </div>
-    <div class="rcard">
-      <h4>Behavior</h4>
-      <div id="tag-area" style="margin-bottom:6px"></div>
-      <p id="note-txt" style="font-size:11px;color:#717171;line-height:1.6"></p>
+      <!-- Category tabs -->
+      <div class="cat-bar">
+        <button class="cat-pill">🌐 All</button>
+        <button class="cat-pill">🏠 Homes</button>
+        <button class="cat-pill">📍 Experiences</button>
+        <button class="cat-pill on">🔔 Services</button>
+      </div>
+
+      <!-- Screen content -->
+      <div class="screen" id="scr"></div>
+
+      <!-- Bottom nav -->
+      <div class="bot-nav">
+        <div class="bot-nav-inner">
+          <div class="bnav-item on" id="bn-explore">
+            <div class="bnav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#DA1249" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+            <span class="bnav-lbl">Explore</span>
+          </div>
+          <div class="bnav-item">
+            <div class="bnav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6C6C" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+            <span class="bnav-lbl">Wishlists</span>
+          </div>
+          <div class="bnav-item" id="bn-trips">
+            <div class="bnav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#DA1249" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+            <span class="bnav-lbl" style="color:#DA1249">Trips</span>
+          </div>
+          <div class="bnav-item">
+            <div class="bnav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6C6C" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <span class="bnav-lbl">Messages</span>
+          </div>
+          <div class="bnav-item">
+            <div class="bnav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6C6C6C" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <span class="bnav-lbl" id="bn-login-lbl">Log in</span>
+          </div>
+        </div>
+        <div class="bot-nav-home"><div class="home-ind"></div></div>
+      </div>
     </div>
   </div>
 
 </div>
 
 <script>
-var S='null-out', step=0;
+var T={li:'yes',sr:'no',st:'no',mk:'no',ml:'yes',md:'yes',mg:'yes'};
+var flowStep=0;
 
-// ── Helpers ──
-var HRT='<div class="hrt"><svg width="10" height="10" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>';
-var ARR='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>';
+// ── SVG helpers ──
+var SVG_HEART='<svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(0,0,0,.5)" stroke="#fff" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+var SVG_ARR='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>';
 
-function sh(t,s,arr){return '<div class="sh"><div><div class="st">'+t+'</div>'+(s?'<div class="ss">'+s+'</div>':'')+'</div>'+(arr?'<div class="sa">'+ARR+'</div>':'')+'</div>';}
-function pcard(bg,badge,name,price){return '<div class="pcard"><div class="pcimg" style="background:'+bg+'"><div class="badge">'+badge+'</div>'+HRT+'</div><div class="pcinfo"><div class="pcn">'+name+'</div><div class="pcp">'+price+'</div></div></div>';}
-function rvcard(bg,n,h){return '<div class="rvcard"><div class="rvimg" style="background:'+bg+'">'+HRT+'</div><div class="rvn">'+n+'</div><div class="rvh">'+h+'</div></div>';}
-function esrow(ico,n,s,fn){var oc=fn?' onclick="'+fn+'"':'';return '<div class="esrow"'+oc+'><div class="esico">'+ico+'</div><div class="estxt"><div class="esn">'+n+'</div><div class="ess">'+s+'</div></div><div class="esth">'+ico+'</div></div>';}
-function svcChip(ico,lbl,fn){var oc=fn?' onclick="'+fn+'"':'';return '<div class="svc-chip"'+oc+'><div class="chip-box"><div class="chi">'+ico+'</div></div><span>'+lbl+'</span></div>';}
-function svcRow(chips){return '<div class="svc-row">'+chips+'</div>';}
-
+function sh(title,arrow){
+  return '<div class="sec-hd"><span class="sec-title">'+title+'</span>'+(arrow?'<div class="sec-arrow">'+SVG_ARR+'</div>':'')+'</div>';
+}
+function tile(illo,label,fn){
+  return '<div class="svc-tile"'+(fn?' onclick="'+fn+'"':'')+'><div class="svc-tile-img"><span class="svc-tile-illo">'+illo+'</span></div><div class="svc-tile-label">'+label+'</div></div>';
+}
+function pcard(bg,badge,name,sub,price,rating){
+  return '<div class="pcard">'+
+    '<div class="pcard-photo"><div class="pcard-photo-bg" style="background:'+bg+'">'+
+    (badge?'<div class="pcard-badge">'+badge+'</div>':'')+
+    '<div class="pcard-heart">'+SVG_HEART+'</div>'+
+    '</div></div>'+
+    '<div class="pcard-meta"><div class="pcard-name">'+name+'</div>'+(sub?'<div class="pcard-price">'+sub+'</div>':'')+'<div class="pcard-rating"><span class="star-icon"></span>&nbsp;'+rating+'</div></div>'+
+    '</div>';
+}
+function rvCard(bg,n,h){
+  return '<div class="rv-card"><div class="rv-photo" style="background:'+bg+'"><div class="pcard-heart">'+SVG_HEART+'</div></div><div class="rv-name">'+n+'</div><div class="rv-host">'+h+'</div></div>';
+}
 function photographers(){
-  return sh('Capture your memories','',true)+
-  '<div class="pgrid">'+pcard('#c2b09a','Popular','Holiday photoshoot','From $150  ★ 4.97')+pcard('#b5a494','Popular','Professional portraits','From $175  ★ 4.99')+'</div>';
+  return sh('Capture your memories',true)+
+  '<div class="pgrid">'+
+  pcard('#c2b09a','Popular','Holiday photoshoot','From $150','From $150','4.97 (127)')+
+  pcard('#9b8878','Popular','Professional portraits','From $175','From $175','4.99 (84)')+
+  '</div>';
 }
 function chefs(){
-  return sh('Enjoy your own private chef','',true)+
-  '<div class="pgrid">'+pcard('#c4702a','','Seasonal tasting menu by Alexander','From $100/guest  ★ 5.0')+pcard('#7a9e50','','Michelin-quality fare by Maxwell','From $300/guest  ★ 5.0')+'</div>';
+  return sh('Enjoy your own private chef',true)+
+  '<div class="pgrid">'+
+  pcard('#c4702a','','Seasonal tasting menu by Alexander','From $100 / guest','From $100 / guest · $200 minimum','5.0')+
+  pcard('#7a9e50','','Michelin-quality fare by Maxwell','From $300 / guest','From $300 / guest','5.0')+
+  '</div>';
 }
-function hairStyling(){
-  return sh('Hair styling','',true)+
-  '<div class="pgrid">'+pcard('#d4c0b0','Guest favorite','Hair styling with Isabel','From $90  ★ 4.8')+pcard('#c0b0a8','Guest favorite','Bridal makeup artist','From $110  ★ 4.9')+'</div>';
+function rv(){
+  return sh('Recently viewed',true)+
+  '<div class="rv-scroll">'+
+  rvCard('#c4702a','Curated dining experience','Hosted by Lynn')+
+  rvCard('#8fad6c','Custom, exclusive meals','Hosted by Lynn')+
+  rvCard('#c8b8a2','Massage by Laurent','Hosted by Lynn')+
+  '</div>';
 }
-function recentViewed(){
-  return sh('Recently viewed','',true)+
-  '<div class="rvrow">'+rvcard('#c4702a','Curated dining experience','Hosted by Lynn')+rvcard('#8fad6c','Custom, exclusive meals','Hosted by Lynn')+rvcard('#c8b8a2','Massage by Laurent','Hosted by Lynn')+'</div>';
+function tiles(){
+  return sh('Services',false)+
+  '<div class="svc-tiles">'+
+  tile('👨‍🍳','Chefs','')+
+  tile('📸','Photography','')+
+  tile('🚗','Car rental','openModal()')+
+  tile('💇','Haircare','')+
+  '</div>';
 }
-function carInline(){
-  return '<div class="car-inline" onclick="openModal()"><div class="ci-ico">🚗</div><div class="ci-txt"><h4>Rent a car for your trip</h4><p>Get 15% off your rental.</p></div><button class="ci-btn">Find a car</button></div>';
+function essentials(city){
+  return sh('Essential services for '+city,false)+
+  '<div class="svc-tiles">'+
+  tile('🚗','Rental cars','openModal()')+
+  tile('🛒','Groceries','')+
+  tile('✈️','Airport pickups','')+
+  '</div>';
 }
-function essentialsFor(city){
-  return sh('Essential services for '+city,'',false)+
-  esrow('🚗','Rental cars','Arrive to a well-stocked fridge','openModal()')+
-  esrow('🛒','Groceries','Arrive to a well-stocked fridge','')+
-  esrow('🧳','Airport pickups','Schedule a ride in advance','');
+function xlCard(title,sub,btnLabel,fn){
+  return '<div class="xl-card">'+
+  '<span class="xl-illo">🚙</span>'+
+  '<div><div class="xl-title">'+title+'</div><div class="xl-sub">'+sub+'</div></div>'+
+  '<button class="xl-btn"'+(fn?' onclick="'+fn+'"':'')+'>'+btnLabel+'</button>'+
+  '</div>';
 }
-function xlSpotlight(title,sub,btnLabel,fn){
-  var oc=fn?' onclick="'+fn+'"':'';
-  return '<div class="xl"><span class="xl-illo">🚙</span><div class="xl-title">'+title+'</div><div class="xl-sub">'+sub+'</div><button class="xl-btn"'+oc+'>'+btnLabel+'</button></div>';
+function spotlightCard(title,sub,btn,fn){
+  return '<div class="spotlight-card"'+(fn?' onclick="'+fn+'"':'')+'><div class="sp-content"><div class="sp-text"><div class="sp-title">'+title+'</div><div class="sp-sub">'+sub+'</div></div><button class="sp-btn">'+btn+'</button></div><div class="sp-img">🚗</div></div>';
 }
 
-// ── Screens ──
-var screens={
-  'null-out':function(){
-    return sh('Services','',false)+
-    svcRow(svcChip('👨‍🍳','Chefs','')+svcChip('📸','Photography','')+svcChip('🚗','Car rental','openModal()')+svcChip('💇','Haircare',''))+
-    photographers()+chefs()+carInline()+hairStyling();
-  },
-  'null-in':function(){
-    return sh('Services','',false)+
-    svcRow(svcChip('👨‍🍳','Chefs','')+svcChip('📸','Photography','')+svcChip('🚗','Car rental','openModal()')+svcChip('💇','Haircare',''))+
-    photographers()+chefs()+carInline()+hairStyling();
-  },
-  'prev':function(){
-    return '<div class="cont"><div class="cont-th">🍽️</div><div><h4>Continue searching for services in Paris</h4><p>Dec 22-28 · 4 guests ›</p></div></div>'+
-    recentViewed()+
-    essentialsFor('Paris')+
-    photographers()+chefs();
-  },
-  'no-trip':function(){
-    return sh('Services','',false)+
-    svcRow(svcChip('👨‍🍳','Chefs','')+svcChip('📸','Photography','')+svcChip('🚗','Car rental','openModal()')+svcChip('💇','Haircare',''))+
-    photographers()+chefs()+carInline()+hairStyling();
-  },
-  'trip':function(){
-    return essentialsFor('Paris')+
-    recentViewed()+
-    photographers()+chefs();
-  },
-  'xl':function(){
-    return xlSpotlight('Rent a car for Paris','Choose the right car for you and your group.','Start browsing','openModal()')+
-    recentViewed()+
-    sh('Services in Paris','',false)+
-    svcRow(svcChip('👨‍🍳','Chefs','')+svcChip('🛒','Groceries','')+svcChip('📸','Photography','')+svcChip('🚗','Car rental','openModal()'))+
-    photographers()+chefs()+carInline();
-  },
-  'after':function(){
-    return xlSpotlight('Storage your bags until your car is ready','Get 15% off luggage storage.','Find a storage','')+
-    sh('More services in Paris','',false)+
-    esrow('🚗','Rental cars','Arrive to a well-stocked fridge','openModal()')+
-    esrow('🛒','Groceries','Arrive to a well-stocked fridge','')+
-    photographers()+chefs();
-  },
-  'during':function(){
-    return xlSpotlight('Groceries delivered to your Airbnb in 1 hour','Skip the run to the store — delivery on us.','Order now','')+
-    sh('More services in Paris','',false)+
-    esrow('🚗','Rental cars','Arrive to a well-stocked fridge','openModal()')+
-    esrow('🧳','Airport pickups','Schedule a ride in advance','')+
-    photographers()+chefs();
-  },
-  'rebook':function(){
-    return xlSpotlight('Do you need to rent a SUV again?','Last trip you rented a Standard SUV for $79.','Find new car','openModal()')+
-    essentialsFor('Paris')+
-    photographers()+chefs();
-  },
-  'email':function(){
-    return emailScreen();
-  },
-  'trips-tab':function(){
-    return tripsTabHTML();
+// ── Screen builder ──
+function buildScreen(){
+  var li=T.li==='yes', sr=T.sr==='yes', st=li&&T.st==='yes', mk=T.mk==='yes';
+  if(mk) return xlCard('Rent a car for Paris','Choose the right car for you and your group.','Start browsing','openModal()')+rv()+sh('Services in Paris',false)+'<div class="svc-tiles">'+tile('👨‍🍳','Chefs','')+tile('🛒','Groceries','')+tile('📸','Photography','')+tile('🚗','Car rental','openModal()')+'</div>'+photographers()+chefs()+spotlightCard('Rent a car for your trip','Get 15% off your rental.','Find a car','openModal()');
+  if(!li&&!sr) return tiles()+photographers()+chefs()+spotlightCard('Rent a car for your trip','Get 15% off your rental.','Find a car','openModal()');
+  if(!li&&sr) return '<div class="cont-card"><div class="cont-thumb">🍽️</div><div><h4>Continue searching for services in Paris</h4><p>Dec 22-28 · 4 guests ›</p></div></div>'+rv()+essentials('Paris')+photographers()+chefs();
+  if(li&&!sr&&!st) return tiles()+photographers()+chefs()+spotlightCard('Rent a car for your trip','Get 15% off your rental.','Find a car','openModal()');
+  if(li&&sr&&!st) return '<div class="cont-card"><div class="cont-thumb">🍽️</div><div><h4>Continue searching for services in Paris</h4><p>Dec 22-28 · 4 guests ›</p></div></div>'+rv()+essentials('Paris')+photographers()+chefs();
+  if(li&&!sr&&st) return essentials('Paris')+tiles()+rv()+photographers()+chefs();
+  if(li&&sr&&st) return essentials('Paris')+rv()+photographers()+chefs();
+  return '';
+}
+
+function stateInfo(){
+  var li=T.li==='yes', sr=T.sr==='yes', st=li&&T.st==='yes', mk=T.mk==='yes';
+  if(mk){var pf=buildPrefill();return{name:'Marketing deep link',tag:'mkt',desc:'XL Spotlight shown. Interstitial auto-opens. Prefill: '+(pf||'none — add params to URL.'),steps:li?['Deep link opens','XL spotlight','Modal opens ('+pf+')','Tap Continue','→ Car rentals']:['Deep link opens','XL spotlight','Modal opens','Tap Login & continue','Login / OTP','→ Car rentals']};}
+  if(!li&&!sr) return{name:'Null — logged out',tag:'out',desc:'No prior search. Service icons + photo carousels. No partner/grocery services.',steps:['Services tab','Tap Car rental tile','Modal opens','Tap Login & continue','Login / OTP','→ Car rentals']};
+  if(!li&&sr) return{name:'Prev searched — logged out',tag:'out',desc:'Recent search context shown. Essential services for that location.',steps:['Services tab','Recent context shown','Tap Rental cars','Modal opens','Tap Login & continue','Login / OTP','→ Car rentals']};
+  if(li&&!sr&&!st) return{name:'Null — logged in, no trip',tag:'in',desc:'No prior search, no stay. Same layout as logged-out null. Continue goes straight to webview.',steps:['Services tab','Tap Car rental tile','Modal opens','Tap Continue','→ Car rentals']};
+  if(li&&sr&&!st) return{name:'Prev searched — logged in, no trip',tag:'in',desc:'Recent search context. Direct to webview after Continue.',steps:['Services tab','Recent context shown','Tap Rental cars','Modal opens','Tap Continue','→ Car rentals']};
+  if(li&&!sr&&st) return{name:'Trip booked — no prior search',tag:'in',desc:'Stay booked. Essential services first. Dates + guests prefilled in modal.',steps:['Services tab','Essential services shown','Tap Rental cars','Modal (prefilled)','Tap Continue','→ Car rentals']};
+  if(li&&sr&&st) return{name:'Trip booked + prior search',tag:'in',desc:'Richest context. Stay + recent search. Modal fully prefilled.',steps:['Services tab','Essential services + recent','Tap Rental cars','Modal (prefilled)','Tap Continue','→ Car rentals']};
+  return{name:'',tag:'in',desc:'',steps:[]};
+}
+
+function buildPrefill(){
+  var p=[];
+  if(T.ml==='yes') p.push('Paris');
+  if(T.md==='yes') p.push('Dec 22–28');
+  if(T.mg==='yes') p.push('4 guests');
+  return p.join(' · ');
+}
+
+function renderInfo(){
+  var s=stateInfo();
+  document.getElementById('sname').textContent=s.name;
+  document.getElementById('sdesc').textContent=s.desc;
+  var tagH={out:'<span class="tag tag-out">Logged out</span>',in:'<span class="tag tag-in">Logged in</span>',mkt:'<span class="tag tag-in">Logged in</span> <span class="tag tag-mkt">Marketing</span>'};
+  document.getElementById('tag-area').innerHTML=tagH[s.tag]||'';
+  document.getElementById('note-txt').textContent=s.desc;
+  document.getElementById('flow-list').innerHTML=s.steps.map(function(st,i){
+    return '<div class="fi"><div class="fn'+(i===flowStep?' cur':'')+'">'+( i+1)+'</div><span>'+st+'</span></div>';
+  }).join('');
+}
+
+function updateURL(){
+  var mk=T.mk==='yes';
+  document.getElementById('mkt-extra').style.display=mk?'block':'none';
+  if(mk){
+    var params=['marketing_category=carrentals'];
+    if(T.ml==='yes') params.push('location=Paris');
+    if(T.md==='yes') params.push('checkin=2024-12-22&checkout=2024-12-28');
+    if(T.mg==='yes') params.push('guests=4');
+    document.getElementById('mkt-url-live').textContent='airbnb.com/services?'+params.join('&');
   }
-};
-
-function emailScreen(){
-  return '<div class="email-screen" id="email-scr">'+
-  '<div class="email-hdr">'+
-  '<strong>From:</strong> <a href="#">Airbnb</a><br>'+
-  '<strong>To:</strong> <a href="#">host@airbnb.com</a><br>'+
-  '<br><strong>Car rental</strong>'+
-  '</div>'+
-  '<div class="email-body">'+
-  '<span class="email-airbnb">⊕</span>'+
-  '<div class="email-title">Rent a car for your Paris trip</div>'+
-  '<div class="email-sub">They arrive on August 16. Send them check-in details or a welcome note.</div>'+
-  '<button class="email-cta" onclick="openModalFromEmail()">View car rentals</button>'+
-  '</div></div>';
 }
 
-function tripsTabHTML(){
-  return '<div class="trips-hdr"><div><div class="trips-city">Trips</div><div class="trips-sub">Orlando</div></div>'+
-  '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>'+
-  '<div class="trip-card" onclick="openTripModal()">'+
-  '<div class="trip-photo"><div class="trip-label">In 21 days</div><div style="font-size:44px;opacity:.25">🌴</div></div>'+
-  '<div class="trip-info">'+
-  '<div class="trip-name">Home in Orlando</div>'+
-  '<div class="trip-dates">Apr 1–4 · Hosted by Sophie</div>'+
-  '<div class="trip-avs">'+
-  '<div class="av" style="background:#e8d5c4;color:#8b5e3c">S</div>'+
-  '<div class="av" style="background:#d4e8c4;color:#3c6b2a">T</div>'+
-  '<button class="inv-btn">Invite guests</button>'+
-  '</div></div></div>'+
-  '<div style="padding:0 13px">'+
-  '<div class="car-inline" onclick="openTripModal()">'+
-  '<div class="ci-ico">🚗</div>'+
-  '<div class="ci-txt"><h4>Rent a car for your trip</h4><p>Get 15% off your rental.</p></div>'+
-  '<button class="ci-btn">Find a car</button>'+
-  '</div></div>';
+function render(){
+  var li=T.li==='yes';
+  document.getElementById('stay-row').className='tog-row'+(li?'':' off');
+  document.getElementById('bn-login-lbl').textContent=li?'Profile':'Log in';
+  updateURL();
+  var html=buildScreen();
+  var scr=document.getElementById('scr');
+  scr.innerHTML=html;
+  scr.dataset.orig=html;
+  flowStep=0;
+  renderInfo();
+  if(T.mk==='yes') setTimeout(openModal,200);
+}
+
+function tog(key,val){
+  T[key]=val;
+  ['li','sr','st','mk','ml','md','mg'].forEach(function(k){
+    var yes=document.getElementById('t-'+k+'-yes');
+    var no=document.getElementById('t-'+k+'-no');
+    if(!yes||!no) return;
+    var cur=T[k];
+    yes.className='tbtn'+(cur==='yes'?' on'+(['li','ml','md','mg'].includes(k)?' g':''):'');
+    no.className='tbtn'+(cur==='no'?' on':'');
+  });
+  if(key==='li'&&val==='no') T.st='no';
+  render();
 }
 
 // ── Modal ──
 function openModal(){
-  var f=flows[S];
+  var li=T.li==='yes', st=li&&T.st==='yes', mk=T.mk==='yes';
   var scr=document.getElementById('scr');
-  scr.dataset.orig=scr.innerHTML;
-  var prefill=f.loggedIn?'<p class="modal-ctx">Paris · Dec 22–28 · 4 guests</p>':'';
-  var btnLabel=f.loggedIn?'Continue':'Login and continue';
-  scr.innerHTML+='<div class="modal-bg" id="modal-bg">'+
-  '<div class="modal">'+
-  '<button class="modal-x" onclick="closeModal()">✕</button>'+
-  '<div style="text-align:center;margin-top:4px"><span class="credit-pill">20% in Airbnb credit</span></div>'+
-  '<span class="modal-car">🚗</span>'+
-  '<div class="modal-title">Rent a car for your trip</div>'+
-  '<div class="modal-sub">Choose the right car for you and your group.</div>'+
-  prefill+
-  '<button class="btn-blk" onclick="tapContinue()">'+btnLabel+'</button>'+
-  '<p class="modal-legal">By selecting "Continue", you allow Airbnb and Instacart to share your contact, stay, and order information with each other, and you agree to Instacart\'s Terms and Privacy Policy, which governs data usage.</p>'+
-  '</div></div>';
-  step=2;renderFlow();
-}
-
-function openModalFromEmail(){
-  var scr=document.getElementById('scr');
-  var emailEl=document.getElementById('email-scr');
-  if(emailEl){emailEl.style.opacity='.3';emailEl.style.pointerEvents='none';}
-  scr.dataset.orig=scr.innerHTML;
-  scr.innerHTML+='<div class="modal-bg" id="modal-bg">'+
-  '<div class="modal">'+
-  '<button class="modal-x" onclick="closeModalToServices()">✕</button>'+
-  '<div style="text-align:center;margin-top:4px"><span class="credit-pill">20% in Airbnb credit</span></div>'+
-  '<span class="modal-car">🚗</span>'+
-  '<div class="modal-title">Rent a car for your trip</div>'+
-  '<div class="modal-sub">Choose the right car for you and your group.</div>'+
-  '<button class="btn-blk" onclick="tapContinue()">Continue</button>'+
-  '<p class="modal-legal">By selecting "Continue", you allow Airbnb and Instacart to share your contact, stay, and order information. You agree to Instacart\'s Terms and Privacy Policy.</p>'+
-  '</div></div>';
-  step=2;renderFlow();
-}
-
-function closeModalToServices(){
-  // Tapping X takes you to Services tab with XL spotlight
-  var prevS=S;
-  S='xl';
-  document.querySelectorAll('.sbtn').forEach(function(b){b.classList.remove('on')});
-  document.getElementById('b-xl').classList.add('on');
-  setNavForState('xl');
-  var html=screens['xl']();
-  var scr=document.getElementById('scr');
-  scr.innerHTML=html;
-  scr.dataset.orig=html;
-  step=0;renderFlow();
-}
-
-function openTripModal(){
-  var scr=document.getElementById('scr');
-  scr.dataset.orig=scr.innerHTML;
-  scr.innerHTML+='<div class="modal-bg" id="modal-bg">'+
-  '<div class="modal">'+
-  '<button class="modal-x" onclick="closeModal()">✕</button>'+
-  '<div style="text-align:center;margin-top:4px"><span class="credit-pill">20% in Airbnb credit</span></div>'+
-  '<span class="modal-car">🚗</span>'+
-  '<div class="modal-title">Rent a car for your trip</div>'+
-  '<div class="modal-sub">Choose the right car for you and your group.</div>'+
-  '<p class="modal-ctx">Orlando · Apr 1–4 · 4 guests</p>'+
-  '<button class="btn-blk" onclick="tapContinue()">Continue</button>'+
-  '<p class="modal-legal">By selecting "Continue", you allow Airbnb and Instacart to share your contact, stay, and order information. You agree to Instacart\'s Terms and Privacy Policy.</p>'+
-  '</div></div>';
-  step=3;renderFlow();
-}
-
-function tapContinue(){
-  var f=flows[S];
-  if(!f.loggedIn){showLogin();}
-  else{showLoading();}
+  scr.dataset.orig=scr.innerHTML.replace(/<div class="modal-bg"[\s\S]*/,'');
+  var ex=document.getElementById('modal-bg');if(ex)ex.remove();
+  var pf='';
+  if(mk){var p=buildPrefill();if(p) pf='<p class="modal-ctx">'+p+'</p>';}
+  else if(st) pf='<p class="modal-ctx">Paris · Dec 22–28 · 4 guests</p>';
+  var btn=li?'Continue':'Login and continue';
+  var d=document.createElement('div');
+  d.className='modal-bg';d.id='modal-bg';
+  d.innerHTML='<div class="modal">'+
+    '<button class="modal-x" onclick="closeModal()">✕</button>'+
+    '<div style="text-align:center;margin-top:6px"><span class="credit-badge">20% in Airbnb credit</span></div>'+
+    '<span class="modal-car">🚗</span>'+
+    '<div class="modal-title">Rent a car for your trip</div>'+
+    '<div class="modal-sub">Choose the right car for you and your group.</div>'+
+    pf+
+    '<button class="btn-black" onclick="tapContinue()">'+btn+'</button>'+
+    '<p class="modal-legal">By selecting "Continue", you allow Airbnb and Instacart to share your contact, stay, and order information with each other, and you agree to Instacart\'s Terms and Privacy Policy, which governs data usage.</p>'+
+    '</div>';
+  scr.appendChild(d);
+  flowStep=2;renderInfo();
 }
 
 function closeModal(){
-  var scr=document.getElementById('scr');
-  var bg=document.getElementById('modal-bg');
-  if(bg)bg.remove();
-  step=0;renderFlow();
+  var bg=document.getElementById('modal-bg');if(bg)bg.remove();
+  if(T.mk==='yes'){T.mk='no';tog('mk','no');return;}
+  flowStep=0;renderInfo();
+}
+
+function tapContinue(){
+  var li=T.li==='yes';
+  if(!li) showLogin();else showLoading();
 }
 
 function showLogin(){
+  var bg=document.getElementById('modal-bg');if(bg)bg.remove();
   var scr=document.getElementById('scr');
-  var bg=document.getElementById('modal-bg');
-  if(bg)bg.remove();
-  var d=document.createElement('div');
-  d.className='fullscreen';d.id='login-screen';
+  var d=document.createElement('div');d.className='fs';d.id='login-fs';
   d.innerHTML='<div class="login-wrap">'+
-  '<button class="login-close" onclick="closeFullscreen(\'login-screen\')">✕</button>'+
-  '<span class="login-logo">⊕</span>'+
-  '<div class="login-title">Log in or sign up</div>'+
-  '<input class="login-input" placeholder="Phone number or email" value="natalie.smith@gmail.com"/>'+
-  '<button class="btn-blk" onclick="showOTP()">Continue</button>'+
-  '<div class="divider">or</div>'+
-  '<button class="social-btn"><svg width="15" height="15" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Continue with Google</button>'+
-  '<button class="social-btn"><svg width="15" height="15" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.39.07 2.36.74 3.19.75 1.19-.24 2.33-.93 3.6-.84 1.53.15 2.69.77 3.44 1.94-3.13 1.85-2.38 5.77.5 6.9-.62 1.63-1.44 3.23-2.73 4.11zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" fill="#000"/></svg> Continue with Apple</button>'+
-  '</div>';
-  scr.appendChild(d);
-  step=4;renderFlow();
+    '<button class="login-x" onclick="closeFS(\'login-fs\')">✕</button>'+
+    '<span class="airbnb-logo">⊕</span>'+
+    '<div class="login-title">Log in or sign up</div>'+
+    '<input class="login-input" placeholder="Phone number or email" value="natalie.smith@gmail.com"/>'+
+    '<button class="btn-black" onclick="showOTP()">Continue</button>'+
+    '<div class="or-div">or</div>'+
+    '<button class="social-btn"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Continue with Google</button>'+
+    '<button class="social-btn"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.39.07 2.36.74 3.19.75 1.19-.24 2.33-.93 3.6-.84 1.53.15 2.69.77 3.44 1.94-3.13 1.85-2.38 5.77.5 6.9-.62 1.63-1.44 3.23-2.73 4.11zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" fill="#000"/></svg> Continue with Apple</button>'+
+    '</div>';
+  scr.appendChild(d);flowStep=4;renderInfo();
 }
 
 function showOTP(){
-  closeFullscreen('login-screen');
+  closeFS('login-fs');
   var scr=document.getElementById('scr');
-  var d=document.createElement('div');
-  d.className='fullscreen';d.id='otp-screen';
+  var d=document.createElement('div');d.className='fs';d.id='otp-fs';
   d.innerHTML='<div class="otp-wrap">'+
-  '<button class="otp-back" onclick="closeFullscreen(\'otp-screen\');showLogin()">←</button>'+
-  '<div class="otp-title">Confirm it\'s you</div>'+
-  '<div class="otp-sub">We sent a code to +1 (***) ***-3366.</div>'+
-  '<div class="otp-boxes">'+
-  '<div class="otp-box f">2</div><div class="otp-box f">4</div><div class="otp-box f">1</div>'+
-  '<div class="otp-box f">3</div><div class="otp-box f">5</div><div class="otp-box">_</div>'+
-  '</div>'+
-  '<div class="otp-resend">Didn\'t get it? <a>Send a new code</a></div>'+
-  '<button class="try-btn">Try another way</button>'+
-  '<button class="btn-blk" onclick="closeFullscreen(\'otp-screen\');showLoading()">Confirm</button>'+
-  '</div>';
-  scr.appendChild(d);
-  step=5;renderFlow();
-}
-
-function closeFullscreen(id){
-  var el=document.getElementById(id);
-  if(el)el.remove();
+    '<button class="otp-back" onclick="closeFS(\'otp-fs\');showLogin()">←</button>'+
+    '<div class="otp-title">Confirm it\'s you</div>'+
+    '<div class="otp-sub">We sent a code to +1 (***) ***-3366.</div>'+
+    '<div class="otp-boxes"><div class="otp-box f">2</div><div class="otp-box f">4</div><div class="otp-box f">1</div><div class="otp-box f">3</div><div class="otp-box f">5</div><div class="otp-box">_</div></div>'+
+    '<div class="otp-resend">Didn\'t get it? <a>Send a new code</a></div>'+
+    '<button class="try-btn">Try another way</button>'+
+    '<button class="btn-black" onclick="closeFS(\'otp-fs\');showLoading()">Confirm</button>'+
+    '</div>';
+  scr.appendChild(d);flowStep=5;renderInfo();
 }
 
 function showLoading(){
   var scr=document.getElementById('scr');
-  var d=document.createElement('div');
-  d.className='loading-screen';d.id='loading-screen';
-  d.innerHTML='<div class="spinner"></div><p style="font-size:13px;color:var(--muted)">Opening car rentals…</p>';
+  var d=document.createElement('div');d.className='loading-fs';d.id='loading-fs';
+  d.innerHTML='<div class="spinner"></div><p style="font-size:14px;color:var(--foggy)">Opening car rentals…</p>';
   scr.appendChild(d);
-  step=flows[S].steps.length-1;renderFlow();
-  setTimeout(function(){closeFullscreen('loading-screen');showWebview();},1300);
+  var s=stateInfo();flowStep=s.steps.length-1;renderInfo();
+  setTimeout(function(){closeFS('loading-fs');showWebview();},1300);
 }
 
 function showWebview(){
   var scr=document.getElementById('scr');
-  var d=document.createElement('div');
-  d.className='webview';d.id='webview';
-  d.innerHTML='<div class="wv-hdr">'+
-  '<button class="wv-exit" onclick="closeFullscreen(\'webview\')">Exit</button>'+
-  '<span class="wv-title">Car rentals</span></div>'+
+  var d=document.createElement('div');d.className='wv-fs';d.id='wv-fs';
+  d.innerHTML='<div class="wv-hdr"><button class="wv-exit" onclick="closeFS(\'wv-fs\')">Exit</button><span class="wv-title">Car rentals</span></div>'+
   '<div class="wv-body">'+
-  '<div class="wv-search"><div class="wv-search-ico"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#717171" stroke-width="1.4"/><line x1="9.5" y1="9.5" x2="13" y2="13" stroke="#717171" stroke-width="1.4" stroke-linecap="round"/></svg></div>'+
-  '<div><div class="wv-search-txt">Near your stay in Orlando, FL</div><div class="wv-search-sub">Mar 1, 10 AM – Mar 4, 12 AM</div></div></div>'+
-  '<div class="chips">'+
-  '<div class="chip">⚙ 2</div>'+
-  '<div class="chip">Airports &nbsp;✕</div>'+
-  '<div class="chip">Fits 4 people &nbsp;✕</div>'+
-  '<div class="chip light">Location</div>'+
-  '</div>'+
-  '<div class="credit-box"><div class="credit-box-txt"><p>Get 20% in Airbnb credit</p><span>Use on stays, experiences, or select services. <a>Terms apply</a></span></div><div class="credit-tag">🏷️</div></div>'+
-  carCard('SIXT','sixt','Medium SUV','BMW X3 or similar','7 seats · 3 bags · In terminal (MCO)',['Free cancellation'],'','$62/day','Total $248')+
-  carCard('Hertz','hertz','Minivan','Dodge Grand Caravan or similar','7 seats · 3 bags · In terminal (MCO)',['15% off','Online check-in','+1 driver'],'$106','$94/day','Total $284')+
-  carCard('Hertz','hertz','Elite SUV','Cadillac Escalade or similar','7 seats · 5 bags · In terminal (ORL)',['15% off','Online check-in'],'','','$94/day')+
+  '<div class="wv-search-row"><div><div class="wv-stxt">Near your stay in Orlando, FL</div><div class="wv-ssub">Mar 1, 10 AM – Mar 4, 12 AM</div></div></div>'+
+  '<div class="wv-chips"><div class="wchip">⚙ 2</div><div class="wchip">Airports ✕</div><div class="wchip">Fits 4 people ✕</div><div class="wchip lt">Location</div></div>'+
+  '<div class="credit-box"><div class="cb-txt"><p>Get 20% in Airbnb credit</p><span>Use on stays, experiences, or select services. <a>Terms apply</a></span></div><div style="font-size:28px">🏷️</div></div>'+
+  wvCar('SIXT','#FF5A00','Medium SUV','BMW X3 or similar','7 seats · 3 bags · In terminal (MCO)',['Free cancellation'],'','$62/day','Total $248')+
+  wvCar('Hertz','#c8a000','Minivan','Dodge Grand Caravan or similar','7 seats · 3 bags · In terminal (MCO)',['15% off','Online check-in','+1 driver'],'$106','$94/day','Total $284')+
+  wvCar('Hertz','#c8a000','Elite SUV','Cadillac Escalade or similar','7 seats · 5 bags · In terminal (ORL)',['15% off','Online check-in'],'','$94/day','Total $376')+
   '</div>';
   scr.appendChild(d);
 }
 
-function carCard(brand,brandKey,name,sim,detail,tags,origPrice,price,total){
-  var tagsHtml=tags.map(function(t){
-    var cls=t==='Free cancellation'?'ctag green':(t==='15% off'?'ctag green':'ctag');
-    return '<span class="'+cls+'">'+t+'</span>';
-  }).join('');
-  var orig=origPrice?'<span class="car-orig">'+origPrice+'</span>':'';
-  var logoStyle=brandKey==='sixt'?'color:#FF5A00':'color:#c8a000';
+function wvCar(brand,bc,name,sim,detail,tags,orig,price,total){
   return '<div class="car-card">'+
-  '<div class="car-photo"><div style="font-size:11px;font-weight:900;letter-spacing:.05em;'+logoStyle+'">'+brand.toUpperCase()+'</div></div>'+
-  '<div class="car-info">'+
-  '<div class="car-name">'+name+'</div>'+
-  '<div class="car-sim">'+sim+'</div>'+
-  '<div class="car-detail">'+detail+'</div>'+
-  '<div class="car-tags">'+tagsHtml+'</div>'+
-  '<div class="car-price">'+orig+price+' · '+total+'</div>'+
-  '</div></div>';
+  '<div class="car-logo-box"><span class="car-brand-txt" style="color:'+bc+'">'+brand+'</span></div>'+
+  '<div style="flex:1"><div class="car-name">'+name+'</div><div class="car-sim">'+sim+'</div><div class="car-detail">'+detail+'</div>'+
+  '<div class="car-tags">'+tags.map(function(t){return '<span class="ctag'+(t==='Free cancellation'||t==='15% off'?' g':'')+'">'+t+'</span>';}).join('')+'</div>'+
+  '<div class="car-price">'+(orig?'<span class="car-orig">'+orig+'</span>':'')+price+' · '+total+'</div></div></div>';
 }
 
-// ── Flow config ──
-var flows={
-  'null-out':{loggedIn:false,steps:['Services tab','Tap Car rental','Modal opens','Tap Login & continue','Log in / OTP','→ Car rentals'],note:'Logged out. No partner/grocery services shown. Login prompt appears after modal CTA — not before.',tommy:'Null is not always logged out. This state covers logged-out users with no prior search.'},
-  'null-in':{loggedIn:true,steps:['Services tab','Tap Car rental','Modal opens','Tap Continue','→ Car rentals'],note:'Logged in, no trip, no prior search. Same layout as logged-out null — no partner services shown.',tommy:'Null logged-in: someone with no past search and no trip. Same UI, but Continue goes straight to webview.'},
-  'prev':{loggedIn:false,steps:['Services tab','Recent context shown','Tap Rental cars','Modal opens','Tap Login & continue','Log in / OTP','→ Car rentals'],note:'Location from recent search prefills context. Sign-in still deferred to after tapping Continue.',tommy:'"Prev Searched" might still be WIP — confirm with design whether this applies logged-in too.'},
-  'no-trip':{loggedIn:true,steps:['Services tab','Tap Car rental','Modal opens (current location)','Tap Continue','→ Car rentals'],note:'Logged in, no trip. Modal opens with current location. Direct to webview — no login gate.'},
-  'trip':{loggedIn:true,steps:['Services tab','Essential services list','Tap Rental cars','Modal (prefilled)','Tap Continue','→ Car rentals'],note:'Logged in with upcoming stay. Dates + location prefilled in modal. Direct to webview.'},
-  'xl':{loggedIn:true,steps:['Services tab','XL Spotlight shown','Tap Start browsing','Modal opens','Tap Continue','→ Car rentals'],note:'Trip booked or came from marketing deep link. XL hero at top of Services tab.'},
-  'after':{loggedIn:true,steps:['Post-booking','Complementary XL','Tap service','→ Webview'],note:'Upsell for complementary service shown after booking. No login gate.'},
-  'during':{loggedIn:true,steps:['In-stay context','High-intent XL','Tap Order now','→ Webview'],note:'Active stay. Urgent same-day copy. Direct booking.'},
-  'rebook':{loggedIn:true,steps:['Post-trip','Re-book XL','Tap Find new car','Modal','→ Car rentals'],note:'Last service resurfaces for re-booking. Logged in — no gate.'},
-  'email':{loggedIn:true,steps:['Email/marketing CTA','Modal opens','Tap Continue','→ Car rentals','Close → Services tab with XL'],note:'Tapping email CTA opens interstitial. Tapping ✕ lands on Services tab with XL spotlight at top.'},
-  'trips-tab':{loggedIn:true,steps:['Trips tab','Trip card shown','Tap service tile','Modal (prefilled)','Tap Continue','→ Car rentals'],note:'Trip context auto-prefills location + dates. Tapping service tile opens modal.'}
-};
+function closeFS(id){var el=document.getElementById(id);if(el)el.remove();}
 
-function setNavForState(key){
-  var isTrips=key==='trips-tab';
-  var isEmail=key==='email';
-  var isLoggedOut=!flows[key].loggedIn&&key!=='null-in';
-  document.getElementById('main-tabs').style.display=(isTrips||isEmail)?'none':'flex';
-  document.getElementById('search-pill').style.display=isEmail?'none':'flex';
-  document.querySelectorAll('.bn').forEach(function(b){b.classList.remove('on')});
-  if(isTrips){document.getElementById('bn-trips').classList.add('on');}
-  else{document.getElementById('bn-explore').classList.add('on');}
-  var loginLbl=document.getElementById('bn-login-lbl');
-  loginLbl.textContent=flows[key].loggedIn?'Profile':'Log in';
-}
-
-function renderFlow(){
-  var f=flows[S];
-  document.getElementById('flow-list').innerHTML=f.steps.map(function(s,i){
-    return '<div class="fi"><div class="fn'+(i===step?' cur':'')+'">'+( i+1)+'</div><span>'+s+'</span></div>';
-  }).join('');
-  document.getElementById('tag-area').innerHTML=f.loggedIn?'<span class="tag tag-in">Logged in</span>':'<span class="tag tag-out">Logged out</span>';
-  document.getElementById('note-txt').textContent=f.note;
-  var tb=document.getElementById('tommy-box');
-  var tt=document.getElementById('tommy-txt');
-  if(f.tommy){tb.style.display='block';tt.textContent=f.tommy;}
-  else{tb.style.display='none';}
-}
-
-function go(key){
-  S=key;step=0;
-  document.querySelectorAll('.sbtn').forEach(function(b){b.classList.remove('on')});
-  document.getElementById('b-'+key).classList.add('on');
-  setNavForState(key);
-  var html=screens[key]();
-  document.getElementById('scr').innerHTML=html;
-  document.getElementById('scr').dataset.orig=html;
-  renderFlow();
-}
-
-go('null-out');
+// Init
+['li','sr','st','mk','ml','md','mg'].forEach(function(k){
+  var yes=document.getElementById('t-'+k+'-yes');
+  var no=document.getElementById('t-'+k+'-no');
+  if(!yes||!no) return;
+  var cur=T[k];
+  yes.className='tbtn'+(cur==='yes'?' on'+(['li','ml','md','mg'].includes(k)?' g':''):'');
+  no.className='tbtn'+(cur==='no'?' on':'');
+});
+render();
 </script>
 </body>
 </html>
